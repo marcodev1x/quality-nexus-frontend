@@ -1,10 +1,26 @@
+import { Outlet } from "react-router";
 import ContainerMid from "../components/ContainerMid";
+import TabNav from "../components/TabNav.tsx";
 
 const ConfigurationPage = () => {
+  const configRouters = [
+    {
+      nameRouter: "Usuário",
+      routePush: "/configuracoes/user",
+    },
+    {
+      nameRouter: "Plano",
+      routePush: "/configuracoes/plan",
+    },
+  ];
+
   return (
-    <ContainerMid>
-      <h1>22</h1>
-    </ContainerMid>
+    <>
+      <TabNav pageOptions={configRouters} />
+      <ContainerMid>
+        <Outlet />
+      </ContainerMid>
+    </>
   );
 };
 

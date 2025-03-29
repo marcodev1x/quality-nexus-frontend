@@ -1,7 +1,13 @@
 import React from "react";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer, ToastPosition, toast } from "react-toastify";
 
-const Toast = ({ message }: { message: string }) => {
+const Toast = ({
+  message,
+  position,
+}: {
+  message: string;
+  position?: ToastPosition;
+}) => {
   React.useEffect(() => {
     const notify = () => toast(message);
     notify();
@@ -10,15 +16,15 @@ const Toast = ({ message }: { message: string }) => {
   return (
     <div>
       <ToastContainer
-        position="top-center"
-        autoClose={5000}
-        hideProgressBar={false}
+        style={{ padding: "1rem" }}
+        position={position}
+        autoClose={3000}
+        hideProgressBar={true}
         newestOnTop={false}
-        closeOnClick={false}
+        closeOnClick={true}
         rtl={false}
         pauseOnFocusLoss
         draggable
-        pauseOnHover
         theme="dark"
       />
     </div>

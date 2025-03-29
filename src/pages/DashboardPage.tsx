@@ -40,7 +40,7 @@ const DashboardPage = () => {
               <ComponentButton
                 label="Acessar"
                 size="medium"
-                variant="secondary"
+                variant="primary"
               />
             }
           />
@@ -53,7 +53,7 @@ const DashboardPage = () => {
               <ComponentButton
                 label="Acessar"
                 size="medium"
-                variant="secondary"
+                variant="primary"
               />
             }
           />
@@ -66,7 +66,7 @@ const DashboardPage = () => {
               <ComponentButton
                 label="Acessar"
                 size="medium"
-                variant="secondary"
+                variant="primary"
               />
             }
           />

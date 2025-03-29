@@ -10,12 +10,7 @@ const LoaderContainer = styled.div`
 
 const Loader = () => (
   <LoaderContainer>
-    <InfinitySpin
-      height="100"
-      width="100"
-      color="#c7f5df"
-      ariaLabel="loading"
-    />
+    <InfinitySpin height="100" width="100" color="#222" ariaLabel="loading" />
   </LoaderContainer>
 );
 

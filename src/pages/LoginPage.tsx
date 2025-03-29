@@ -65,7 +65,6 @@ const LoginContainer = styled.div`
     display: flex;
     padding: 1.5rem;
     color: #222;
-
   }
 
   section .wave span:nth-child(1) {
@@ -94,8 +93,6 @@ const LoginContainer = styled.div`
       transform: translate(-50%, -75%) rotate(360deg);
     }
   }
-
-}
 `;
 
 const LoginCard = styled.div`
@@ -131,15 +128,16 @@ const LoginPage = () => {
 
   const sendForm = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError(null);
     setIsLoading(true);
 
-    if (!emailInput || !passwordInput) {
-      setError("Preencha todos os campos");
-      setIsLoading(false);
-      return;
-    }
-
     try {
+      if (!emailInput || !passwordInput) {
+        setError("Preencha todos os campos");
+        setIsLoading(false);
+        return;
+      }
+
       const response = await axios.post("http://localhost:3000/user/login", {
         email: emailInput,
         password: passwordInput,
@@ -155,15 +153,16 @@ const LoginPage = () => {
     } catch (err) {
       console.error(err);
       setError("Erro ao conectar ao servidor");
+    } finally {
+      setIsLoading(false);
     }
-    setIsLoading(false);
   };
 
   return (
     <LoginContainer>
+      {error && <Toast message={error} position="top-left" />}
       <LoginCard>
         <Title>Bem-vindo de volta ao</Title>
-        {error && <Toast message={error} />}
         <form onSubmit={sendForm}>
           <div style={{ marginLeft: "auto", padding: "2rem" }}>
             <img src="/Quality Nexus White.svg" alt="Quality Nexus" />

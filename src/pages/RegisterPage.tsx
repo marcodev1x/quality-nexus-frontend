@@ -8,7 +8,7 @@ import { NavLink, useNavigate } from "react-router";
 import Toast from "../helpers/Toast";
 import Loader from "../helpers/Loader";
 import EnvsVars from "../services/EnvsVars";
-import { FiArrowLeft } from "react-icons/fi";
+import { FiChevronLeft } from "react-icons/fi";
 
 const RegisterContainer = styled.div`
   display: flex;
@@ -179,14 +179,14 @@ const RegisterPage = () => {
 
   return (
     <RegisterContainer>
+      {error && <Toast message={error} position="top-center" />}
       <RegisterCard>
         <NavLink to={"/"}>
-          <FiArrowLeft
+          <FiChevronLeft
             size={32}
             style={{ position: "absolute", top: "16px", left: "16px" }}
           />
         </NavLink>
-        {error && <Toast message={error} />}
         <Title>Crie sua conta no</Title>
         <form onSubmit={sendForm}>
           <div style={{ marginLeft: "auto", padding: "2rem" }}>

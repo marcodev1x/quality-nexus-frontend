@@ -144,7 +144,7 @@ const LateralMenu = () => {
           </li>
         </NavLink>
         <NavLink
-          to="/configuracoes"
+          to="/configuracoes/user"
           style={{ textDecoration: "none" }}
           className={location.pathname === "/configuracoes" ? "active" : ""}
         >

@@ -22,7 +22,16 @@ function App() {
           <Route path="/register" element={<RegisterPage />} />
           <Route element={<ProtectedPage />}>
             <Route path="/home" element={<DashboardPage />} />
-            <Route path="/configuracoes" element={<ConfigurationPage />} />
+            <Route path="/configuracoes" element={<ConfigurationPage />}>
+              <Route
+                path="/configuracoes/user"
+                element={<div>Usuário Page</div>}
+              />
+              <Route
+                path="/configuracoes/plan"
+                element={<div>Plano Page</div>}
+              />
+            </Route>
             <Route path="/interno/integration" element={<Integration />} />
             <Route path="/interno/performance" element={<Performance />} />
             <Route path="/interno/load" element={<LoaderPage />} />

@@ -44,12 +44,7 @@ const StyledNavLink = styled(NavLink)`
   font-weight: bold;
   padding: 8px 12px;
   border-radius: 8px;
-  background: rgba(255, 255, 255, 0.2);
   transition: background 0.3s ease-in-out;
-
-  &:hover {
-    background: rgba(255, 255, 255, 0.3);
-  }
 `;
 
 const CardAtalho = ({ title, to, icon, description, button }: CardProps) => {

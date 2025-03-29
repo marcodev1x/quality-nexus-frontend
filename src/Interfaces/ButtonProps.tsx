@@ -1,6 +1,8 @@
+import React from "react";
+
 interface ButtonProps extends React.ComponentProps<"button"> {
-  label: string;
   size: string;
+  label: string;
   variant: string;
 }
 

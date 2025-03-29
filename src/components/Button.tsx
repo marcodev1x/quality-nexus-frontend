@@ -1,36 +1,150 @@
+import React from "react";
 import styled from "styled-components";
-import ButtonProps from "../Interfaces/ButtonProps";
+import { FiLoader } from "react-icons/fi";
+
+export type ButtonVariant = "primary" | "secondary" | "outline";
+export type ButtonSize = "small" | "medium" | "large";
+
+interface ButtonProps {
+  label: string;
+  variant?: ButtonVariant;
+  size?: ButtonSize;
+  onClick?: () => void;
+  disabled?: boolean;
+  loading?: boolean;
+  icon?: React.ReactNode;
+  type?: "button" | "submit" | "reset";
+  className?: string;
+}
 
 const Button = styled.button<ButtonProps>`
-  background-color: ${(props) =>
-    props.variant === "primary" ? "#222" : "#ffffff"};
-  border-radius: 8px;
-  color: ${(props) => (props.variant === "primary" ? "#fff" : "#2ecc71")};
-  margin-top: 0.65rem;
-  padding: 10px 20px;
-  cursor: pointer;
+  margin-top: 1rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: ${(props) => {
+    switch (props.size) {
+      case "small":
+        return "0.5rem 1rem";
+      case "large":
+        return "0.75rem 1.5rem";
+      default:
+        return "0.625rem 1.25rem";
+    }
+  }};
+  font-size: ${(props) => {
+    switch (props.size) {
+      case "small":
+        return "0.875rem";
+      case "large":
+        return "1.125rem";
+      default:
+        return "1rem";
+    }
+  }};
+  border-radius: 0.375rem;
+  border: none;
   font-weight: 600;
-  transition:
-    background-color 0.3s ease,
-    color 0.3s ease;
-  font-size: ${(props) =>
-    props.size === "small"
-      ? "14px"
-      : props.size === "medium"
-        ? "16px"
-        : "18px"};
-  border: 0;
+  cursor: ${(props) =>
+    props.disabled || props.loading ? "not-allowed" : "pointer"};
+  transition: all 0.2s ease;
+  background-color: ${(props) => {
+    switch (props.variant) {
+      case "secondary":
+        return props.disabled ? "#cbd5e0" : "#a0aec0";
+      case "outline":
+        return "transparent";
+      default:
+        return props.disabled ? "#cbd5e0" : "#2ecc71";
+    }
+  }};
+  color: ${(props) => {
+    switch (props.variant) {
+      case "secondary":
+        return "#f7fafc";
+      case "outline":
+        return "#2ecc71";
+      default:
+        return "#f7fafc";
+    }
+  }};
+  border: ${(props) => {
+    switch (props.variant) {
+      case "outline":
+        return "2px solid #2ecc71";
+      default:
+        return "none";
+    }
+  }};
 
   &:hover {
-    background-color: ${(props) =>
-      props.variant === "primary" ? "#333" : "#4ecc71"};
-    color: ${(props) => (props.variant === "primary" ? "#ffffff" : "#2ecc71")};
+    ${(props) => {
+      if (props.disabled || props.loading) return;
+      switch (props.variant) {
+        case "secondary":
+          return "background-color: #81a1c1;";
+        case "outline":
+          return "background-color: rgba(46, 204, 113, 0.1);";
+        default:
+          return "background-color: #27ae60;";
+      }
+    }}
   }
+
+  &:active {
+    ${(props) => {
+      if (props.disabled || props.loading) return;
+      return "transform: translateY(1px);";
+    }}
+  }
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(46, 204, 113, 0.3);
+  }
+
+  ${(props) => {
+    if (props.loading) {
+      return `
+        opacity: 0.9;
+        pointer-events: none;
+      `;
+    }
+  }}
+
+  ${(props) => {
+    if (props.disabled) {
+      return `
+        opacity: 0.6;
+        pointer-events: none;
+      `;
+    }
+  }}
 `;
 
-const ComponentButton = ({ label, size, variant, ...props }: ButtonProps) => {
+const ComponentButton: React.FC<ButtonProps> = ({
+  label,
+  variant = "primary",
+  size = "medium",
+  onClick,
+  disabled = false,
+  loading = false,
+  icon,
+  type = "button",
+  ...props
+}) => {
   return (
-    <Button {...props} size={size} variant={variant}>
+    <Button
+      type={type}
+      variant={variant}
+      size={size}
+      onClick={!disabled && !loading ? onClick : undefined}
+      disabled={disabled || loading}
+      {...props}
+    >
+      {loading && <FiLoader className="animate-spin" />}
+      {icon}
       {label}
     </Button>
   );
