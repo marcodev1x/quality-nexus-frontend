@@ -4,29 +4,107 @@ import Input from "../components/Input";
 import ComponentButton from "../components/Button";
 import { useLocalStorage } from "../hooks/useLocalStorage";
 import axios, { AxiosError } from "axios";
-import { useNavigate } from "react-router";
+import { NavLink, useNavigate } from "react-router";
 import Toast from "../helpers/Toast";
 import Loader from "../helpers/Loader";
+import EnvsVars from "../services/EnvsVars";
+import { FiArrowLeft } from "react-icons/fi";
 
 const RegisterContainer = styled.div`
   display: flex;
   justify-content: start;
   height: 100vh;
-  background: url("../../public/bg.webp") no-repeat center center fixed;
-  background-size: cover;
+  @import url("https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800,900&display=swap");
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+  }
+
+  section {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+  }
+
+  section .wave {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #2ecc71;
+    box-shadow: inset 0 0 50px rgba(0, 0, 0, 0.5);
+    transition: 0.5s;
+  }
+
+  section .wave span {
+    content: "";
+    position: absolute;
+    width: 325vh;
+    height: 325vh;
+    top: 0;
+    left: 50%;
+    transform: translate(-50%, -75%);
+    background: #ffff;
+  }
+
+  .content {
+    position: relative;
+    z-index: 1;
+    font-size: 3em;
+    letter-spacing: 2px;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    padding: 1.5rem;
+    color: #222;
+  }
+
+  section .wave span:nth-child(1) {
+    border-radius: 45%;
+    background: #ffff;
+    animation: animate 5s linear infinite;
+  }
+
+  section .wave span:nth-child(2) {
+    border-radius: 40%;
+    background: #ffff;
+    animation: animate 10s linear infinite;
+  }
+
+  section .wave span:nth-child(3) {
+    border-radius: 42.5%;
+    background: rgba(100, 100, 100, 0.1);
+    animation: animate 15s linear infinite;
+  }
+
+  @keyframes animate {
+    0% {
+      transform: translate(-50%, -75%) rotate(0deg);
+    }
+    100% {
+      transform: translate(-50%, -75%) rotate(360deg);
+    }
+  }
 `;
 
 const RegisterCard = styled.div`
-  background: linear-gradient(135deg, #2ecc71, #222);
+  background: linear-gradient(135deg, #2ecc71, #2ecc71);
   backdrop-filter: blur(10px);
   align-items: center;
   justify-content: center;
   display: flex;
   flex-direction: column;
   padding: 2rem;
-  border-radius: 12px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  max-width: 400px;
+  max-width: 426px;
   width: 100%;
   color: #f8f9fa;
 `;
@@ -54,7 +132,7 @@ const RegisterPage = () => {
     setIsLoading(true);
 
     try {
-      await axios.get(`http://localhost:3000/user/${emailInput}`);
+      await axios.get(`${EnvsVars.API_URL}/user/${emailInput}`);
       setError("Este e-mail já está cadastrado");
       setIsLoading(false);
       return;
@@ -102,9 +180,18 @@ const RegisterPage = () => {
   return (
     <RegisterContainer>
       <RegisterCard>
+        <NavLink to={"/"}>
+          <FiArrowLeft
+            size={32}
+            style={{ position: "absolute", top: "16px", left: "16px" }}
+          />
+        </NavLink>
         {error && <Toast message={error} />}
-        <Title>Crie sua conta</Title>
+        <Title>Crie sua conta no</Title>
         <form onSubmit={sendForm}>
+          <div style={{ marginLeft: "auto", padding: "2rem" }}>
+            <img src="/Quality Nexus White.svg" alt="Quality Nexus" />
+          </div>
           <Input
             label="Nome"
             name="name"
@@ -142,6 +229,16 @@ const RegisterPage = () => {
           {isLoading && <Loader />}
         </form>
       </RegisterCard>
+      <section>
+        <div className="wave">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+        <div className="content">
+          <h2>Melhore a qualidade do seu produto conosco!</h2>
+        </div>
+      </section>
     </RegisterContainer>
   );
 };

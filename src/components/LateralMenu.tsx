@@ -86,7 +86,7 @@ const LateralMenu = () => {
   return (
     <StyledMenu>
       <div>
-        <img src="../../public/Quality Nexus.svg" alt="Quality Nexus" />
+        <img src="/Quality Nexus.svg" alt="Quality Nexus" />
       </div>
       <h1>Bem-vindo, {user?.nome}</h1>
 

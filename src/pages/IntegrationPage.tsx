@@ -14,6 +14,7 @@ import ToastSuccess from "../helpers/ToastSuccess";
 import FirstTopContainer from "../components/FirstTopContainer";
 import RenderExistingTests from "../components/RenderExistingTests";
 import DynamicExpecationInput from "../components/DynamicExpecationInput";
+import EnvsVars from "../services/EnvsVars";
 
 const IntegrationContainer = styled.div`
   display: flex;
@@ -90,7 +91,7 @@ const Integration = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:3000/tests/create",
+        `${EnvsVars.API_URL}/tests/create`,
         {
           type: "integration",
           description: description,

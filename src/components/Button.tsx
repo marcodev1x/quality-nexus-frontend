@@ -6,6 +6,7 @@ const Button = styled.button<ButtonProps>`
     props.variant === "primary" ? "#222" : "#ffffff"};
   border-radius: 8px;
   color: ${(props) => (props.variant === "primary" ? "#fff" : "#2ecc71")};
+  margin-top: 0.65rem;
   padding: 10px 20px;
   cursor: pointer;
   font-weight: 600;
@@ -22,7 +23,7 @@ const Button = styled.button<ButtonProps>`
 
   &:hover {
     background-color: ${(props) =>
-      props.variant === "primary" ? "#2ecc71" : "#f0f0f0"};
+      props.variant === "primary" ? "#333" : "#4ecc71"};
     color: ${(props) => (props.variant === "primary" ? "#ffffff" : "#2ecc71")};
   }
 `;

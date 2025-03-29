@@ -8,8 +8,8 @@ const Sublink = styled.div`
   margin-bottom: 16px;
 
   a {
-    font-weight: bold;
-    color: var(--primary);
+    font-weight: 500;
+    color: #222;
     text-decoration: none;
     transition: color 0.3s ease;
   }

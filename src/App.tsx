@@ -9,8 +9,10 @@ import Integration from "./pages/IntegrationPage";
 import Performance from "./pages/PerformancePage";
 import LoaderPage from "./pages/LoaderPage";
 import ProtectedPage from "./pages/ProtectedPage";
+import EnvsVars from "./services/EnvsVars";
 
 function App() {
+  console.log(EnvsVars);
   return (
     <>
       <GlobalStyle />

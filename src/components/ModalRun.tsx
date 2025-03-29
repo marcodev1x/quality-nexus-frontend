@@ -3,7 +3,7 @@ import { TestsList } from "../Interfaces/TestsList.tsx";
 import styled from "styled-components";
 import ContainerMid from "./ContainerMid.tsx";
 import { FiX } from "react-icons/fi";
-import ComponentButton from "./Button.tsx";
+import RunTest from "../services/RunTest.tsx";
 
 const Background = styled.div`
   position: fixed;
@@ -38,6 +38,7 @@ const ModalContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: start;
+  width: 100%;
 `;
 
 const CloseButton = styled(FiX)`
@@ -67,13 +68,17 @@ const ConfigContainer = styled.div`
   display: flex;
   flex: 1;
   flex-direction: column;
+  overflow: hidden;
 `;
 
 const ConfigText = styled.p`
   font-size: 14px;
+  max-width: 100%;
   color: #555;
   margin: 4px 0;
-  width: auto;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  white-space: pre-wrap;
 `;
 
 const ButtonContainer = styled.div`
@@ -130,6 +135,8 @@ const ModalRun = ({
     updateTest();
   }, [updateTest]);
 
+  if (!test) return null;
+
   if (isOpen && test) {
     return (
       <ContainerMid>
@@ -169,11 +176,7 @@ const ModalRun = ({
               </ConfigText>
             </ConfigContainer>
             <ButtonContainer>
-              <ComponentButton
-                label={"Rodar teste"}
-                size={"medium"}
-                variant={"primary"}
-              />
+              <RunTest test={test} />
             </ButtonContainer>
           </ModalContainer>
         </Background>

@@ -9,6 +9,7 @@ import Loader from "../helpers/Loader";
 import Toast from "../helpers/Toast";
 import ToastSuccess from "../helpers/ToastSuccess";
 import ModalRun from "./ModalRun.tsx";
+import EnvsVars from "../services/EnvsVars";
 
 const TableContainer = styled.div`
   width: 90%;
@@ -74,6 +75,8 @@ const TableHeaderCell = styled.th`
   }
 `;
 
+console.log(EnvsVars.API_URL);
+
 const RenderExistingTests = () => {
   const [deleteTestLoading, setDeleteTestLoading] = React.useState(false);
   const [deleteTestError, setDeleteTestError] = React.useState(false);
@@ -97,7 +100,7 @@ const RenderExistingTests = () => {
     error,
   } = useApi<TestsList[]>(
     "GET",
-    "http://localhost:3000/tests/find-tests",
+    `${EnvsVars.API_URL}/tests/find-tests`,
     null,
     headerMemo,
   );

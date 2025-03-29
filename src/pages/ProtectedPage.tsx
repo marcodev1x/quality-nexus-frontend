@@ -6,6 +6,7 @@ import LateralMenu from "../components/LateralMenu";
 import axios from "axios";
 import { UserResponse } from "../types/UserResponse";
 import UserContext from "../contexts/userContext";
+import EnvsVars from "../services/EnvsVars";
 
 const Layout = styled.div`
   display: flex;
@@ -106,7 +107,7 @@ const ProtectedPage = () => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/user/public", {
+        const response = await axios.get(`${EnvsVars.API_URL}/user/public`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token") || ""}`,
           },
