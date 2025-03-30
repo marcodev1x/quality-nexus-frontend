@@ -1,11 +1,11 @@
 import styled from "styled-components";
 import { InputProps } from "../Interfaces/InputProps";
 
-const InputStyle = styled.div`
+const InputStyle = styled.div<InputProps>`
   display: flex;
   flex-direction: column;
   gap: 8px;
-    
+
   label {
     font-weight: 600;
     color: #333;
@@ -39,6 +39,7 @@ const Input = ({
   type,
   value,
   labelColor,
+  size,
   ...props
 }: InputProps) => {
   return (

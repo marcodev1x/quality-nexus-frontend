@@ -69,7 +69,7 @@ const RegisterContainer = styled.div`
 
   section .wave span:nth-child(1) {
     border-radius: 45%;
-    background: #ffff;
+    background: #2fec71;
     animation: animate 5s linear infinite;
   }
 

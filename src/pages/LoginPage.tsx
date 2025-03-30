@@ -69,13 +69,13 @@ const LoginContainer = styled.div`
 
   section .wave span:nth-child(1) {
     border-radius: 45%;
-    background: #ffff;
+    background: #2fec71;
     animation: animate 5s linear infinite;
   }
 
   section .wave span:nth-child(2) {
     border-radius: 40%;
-    background: #ffff;
+    background: ##2ecc71;
     animation: animate 10s linear infinite;
   }
 

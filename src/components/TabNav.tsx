@@ -20,11 +20,13 @@ const StyledNavLink = styled(NavLink)`
 
   &.active {
     background-color: rgba(46, 604, 13, 0.2);
-    color: #222;
+    color: #2ecc71;
+    font-weight: bold;
   }
 
   &:hover {
-    background-color: rgba(46, 604, 13, 0.4);
+    background-color: rgba(46, 604, 13, 0.2);
+    color: #2ecc71;
   }
 `;
 

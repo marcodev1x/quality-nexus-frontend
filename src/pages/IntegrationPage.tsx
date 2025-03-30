@@ -145,7 +145,7 @@ const Integration = () => {
           <ComponentButton
             label="Adicionar teste"
             size="large"
-            variant="contained"
+            variant="primary"
             onClick={() => setAddTest(true)}
           />
         </FirstTopContainer>

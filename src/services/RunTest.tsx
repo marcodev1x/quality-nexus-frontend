@@ -38,12 +38,21 @@ const RunTest = ({ test }: { test: TestsList }) => {
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [test]);
 
   if (error) return <Toast message={"Erro ao executar o teste"} />;
 
   if (isLoading) return <Loader />;
 
+  const returnResponse = () => {
+    if (!runTest?.response) return;
+
+    if (Array.isArray(runTest.response)) {
+      runTest.response.map((r) => r);
+    }
+
+    return JSON.stringify(runTest.response);
+  };
   return (
     <>
       <ComponentButton
@@ -57,7 +66,13 @@ const RunTest = ({ test }: { test: TestsList }) => {
           <h2>Resultado do teste</h2>
           <p>Status: {runTest.status}</p>
           <p>Tempo de execução: {runTest.duration} ms</p>
-          <p>Corpo da resposta: {runTest.result}</p>
+          <p>Corpo da resposta: {returnResponse()}</p>
+          {runTest.passed ? (
+            <p>Resultado: PASSOU {runTest.result}</p>
+          ) : (
+            <p>Resultado: NÃO PASSOU {runTest.result}</p>
+          )}
+          {!runTest.passed && <p>Valor retornado: {runTest.error}</p>}
         </div>
       )}
     </>

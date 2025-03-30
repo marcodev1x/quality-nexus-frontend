@@ -4,5 +4,8 @@ export type TestRunResponse = {
   status: "queued" | "failed" | "completed" | "running";
   result: string;
   duration: number;
-  results: JSON;
+  response: [] | object | string | null;
+  success: string;
+  passed: boolean;
+  error: string;
 };

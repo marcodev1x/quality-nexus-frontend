@@ -10,6 +10,7 @@ import Performance from "./pages/PerformancePage";
 import LoaderPage from "./pages/LoaderPage";
 import ProtectedPage from "./pages/ProtectedPage";
 import EnvsVars from "./services/EnvsVars";
+import ConfigUser from "./pages/ConfigUser";
 
 function App() {
   console.log(EnvsVars);
@@ -23,10 +24,7 @@ function App() {
           <Route element={<ProtectedPage />}>
             <Route path="/home" element={<DashboardPage />} />
             <Route path="/configuracoes" element={<ConfigurationPage />}>
-              <Route
-                path="/configuracoes/user"
-                element={<div>Usuário Page</div>}
-              />
+              <Route path="/configuracoes/user" element={<ConfigUser />} />
               <Route
                 path="/configuracoes/plan"
                 element={<div>Plano Page</div>}

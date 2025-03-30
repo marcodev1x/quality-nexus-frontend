@@ -20,10 +20,14 @@ const StyledMenu = styled.nav`
   height: 100vh;
   background: #fff;
   padding: 2rem;
+
   h1 {
     color: #333;
+    text-align: center;
+    margin-left: -20px;
+    margin-top: 8px;
     font-weight: 600;
-    margin-bottom: 2rem;
+    margin-bottom: 0.5rem;
   }
 
   ul {
@@ -71,6 +75,17 @@ const StyledMenu = styled.nav`
       color: #c0392b;
     }
   }
+  .plan {
+    padding: 0.32rem 1.5rem;
+    border-radius: 16px;
+    text-align: center;
+    background: #d1f5df;
+    color: #2ecc71;
+
+    width: fit-content;
+
+    margin: 12px auto 24px 60px;
+  }
 `;
 
 const LateralMenu = () => {
@@ -83,12 +98,23 @@ const LateralMenu = () => {
 
   const user = useUser();
 
+  const filterPlan = () => {
+    if (user?.role === "free") {
+      return "Gratuito";
+    } else if (user?.role === "paid") {
+      return "Pago";
+    } else {
+      return "Guest";
+    }
+  };
+
   return (
     <StyledMenu>
       <div>
         <img src="/Quality Nexus.svg" alt="Quality Nexus" />
       </div>
       <h1>Bem-vindo, {user?.nome}</h1>
+      <p className="plan">{filterPlan()}</p>
 
       <ul>
         <NavLink

@@ -5,8 +5,8 @@ import { FiLoader } from "react-icons/fi";
 export type ButtonVariant = "primary" | "secondary" | "outline";
 export type ButtonSize = "small" | "medium" | "large";
 
-interface ButtonProps {
-  label: string;
+interface ButtonProps extends React.ComponentProps<"button"> {
+  label?: string;
   variant?: ButtonVariant;
   size?: ButtonSize;
   onClick?: () => void;
@@ -27,6 +27,8 @@ const Button = styled.button<ButtonProps>`
     switch (props.size) {
       case "small":
         return "0.5rem 1rem";
+      case "medium":
+        return "0.625rem 1.25rem";
       case "large":
         return "0.75rem 1.5rem";
       default:

@@ -1,6 +1,14 @@
 import { Outlet } from "react-router";
-import ContainerMid from "../components/ContainerMid";
 import TabNav from "../components/TabNav.tsx";
+import styled from "styled-components";
+
+const ContainerConfig = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  justify-content: center;
+  padding: 44px;
+`;
 
 const ConfigurationPage = () => {
   const configRouters = [
@@ -17,9 +25,11 @@ const ConfigurationPage = () => {
   return (
     <>
       <TabNav pageOptions={configRouters} />
-      <ContainerMid>
-        <Outlet />
-      </ContainerMid>
+      <>
+        <ContainerConfig>
+          <Outlet />
+        </ContainerConfig>
+      </>
     </>
   );
 };
