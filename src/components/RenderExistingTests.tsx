@@ -4,7 +4,7 @@ import GetToken from "../services/GetToken";
 import useApi from "../hooks/useApi";
 import { TestsList } from "../Interfaces/TestsList";
 import styled from "styled-components";
-import { FiTrash } from "react-icons/fi";
+import { FiTrash, FiInfo, FiPlay } from "react-icons/fi";
 import Loader from "../helpers/Loader";
 import Toast from "../helpers/Toast";
 import ToastSuccess from "../helpers/ToastSuccess";
@@ -51,8 +51,11 @@ const TableRow = styled.tr`
 
   &:hover {
     background: rgba(46, 204, 113, 0.1);
-    transition: background 0.3s ease;
+    border-left: 3px solid #2ecc71;
+    transition: all 0.3s ease;
   }
+
+  cursor: pointer;
 `;
 
 const TableCell = styled.td`
@@ -60,6 +63,7 @@ const TableCell = styled.td`
   text-align: left;
   border-bottom: 1px solid #ddd;
   color: #505050;
+  vertical-align: middle;
 
   @media (max-width: 768px) {
     padding: 10px;
@@ -72,6 +76,138 @@ const TableHeaderCell = styled.th`
 
   @media (max-width: 768px) {
     padding: 10px;
+  }
+`;
+
+const EmptyRow = styled.tr`
+  height: 100px;
+`;
+
+const EmptyCell = styled(TableCell)`
+  text-align: center;
+  color: #888;
+  font-style: italic;
+`;
+
+const MethodBadge = styled.span`
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 30px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  background: ${(props) => {
+    switch (props.method) {
+      case "GET":
+        return "rgba(46, 204, 113, 0.15)";
+      case "POST":
+        return "rgba(52, 152, 219, 0.15)";
+      case "PUT":
+        return "rgba(243, 156, 18, 0.15)";
+      case "DELETE":
+        return "rgba(231, 76, 60, 0.15)";
+      case "PATCH":
+        return "rgba(155, 89, 182, 0.15)";
+      default:
+        return "rgba(149, 165, 166, 0.15)";
+    }
+  }};
+  color: ${(props) => {
+    switch (props.method) {
+      case "GET":
+        return "#27ae60";
+      case "POST":
+        return "#2980b9";
+      case "PUT":
+        return "#d35400";
+      case "DELETE":
+        return "#c0392b";
+      case "PATCH":
+        return "#8e44ad";
+      default:
+        return "#7f8c8d";
+    }
+  }};
+`;
+
+const ExpectationsText = styled.div`
+  max-width: 300px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: #555;
+  font-size: 13px;
+  padding-right: 10px;
+
+  &:hover {
+    white-space: normal;
+    word-break: break-word;
+  }
+`;
+
+const UrlText = styled.div`
+  color: #2980b9;
+  max-width: 250px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 13px;
+
+  &:hover {
+    text-decoration: underline;
+  }
+`;
+
+const Description = styled.div`
+  font-weight: 500;
+  color: #333;
+`;
+
+const IdCell = styled(TableCell)`
+  font-weight: 600;
+  color: #2ecc71;
+  text-align: center;
+  width: 60px;
+`;
+
+const ActionsCell = styled(TableCell)`
+  width: 80px;
+  text-align: center;
+`;
+
+const ActionButton = styled.div`
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(231, 76, 60, 0.1);
+  color: #e74c3c;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: #e74c3c;
+    color: white;
+    transform: scale(1.1);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+`;
+
+const EmptyStateMessage = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 10px;
+  padding: 20px;
+  color: #777;
+
+  svg {
+    font-size: 24px;
+    color: #2ecc71;
+    opacity: 0.7;
   }
 `;
 
@@ -190,33 +326,47 @@ const RenderExistingTests = () => {
           </tr>
         </TableHeader>
         <tbody>
-          {tests.map((test, id) => (
-            <TableRow
-              key={id}
-              style={{ cursor: "pointer" }}
-              onClick={() => handleModalOpenning(test)}
-            >
-              <TableCell>{id + 1}</TableCell>
-              <TableCell>{test.description}</TableCell>
-              <TableCell>{test.config.method}</TableCell>
-              <TableCell>{test.config.url}</TableCell>
-              <TableCell>
-                {renderExpectations(test.config.expectations)}
-              </TableCell>
-              <TableCell>
-                <FiTrash
-                  onClick={(e) => {
-                    handleDeleteTest(test.id);
-                    e.stopPropagation();
-                  }}
-                />
-              </TableCell>
-            </TableRow>
-          ))}
-          {tests.length === 0 && (
-            <TableRow>
-              <TableCell colSpan={6}>Nenhum teste cadastrado</TableCell>
-            </TableRow>
+          {tests.length > 0 ? (
+            tests.map((test, id) => (
+              <TableRow key={id} onClick={() => handleModalOpenning(test)}>
+                <IdCell>{id + 1}</IdCell>
+                <TableCell>
+                  <Description>{test.description}</Description>
+                </TableCell>
+                <TableCell>
+                  <MethodBadge method={test.config.method}>
+                    {test.config.method}
+                  </MethodBadge>
+                </TableCell>
+                <TableCell>
+                  <UrlText>{test.config.url}</UrlText>
+                </TableCell>
+                <TableCell>
+                  <ExpectationsText>
+                    {renderExpectations(test.config.expectations)}
+                  </ExpectationsText>
+                </TableCell>
+                <ActionsCell>
+                  <ActionButton
+                    onClick={(e) => {
+                      handleDeleteTest(test.id);
+                      e.stopPropagation();
+                    }}
+                  >
+                    <FiTrash size={16} />
+                  </ActionButton>
+                </ActionsCell>
+              </TableRow>
+            ))
+          ) : (
+            <EmptyRow>
+              <EmptyCell colSpan={6}>
+                <EmptyStateMessage>
+                  <FiInfo size={24} />
+                  <span>Nenhum teste cadastrado</span>
+                </EmptyStateMessage>
+              </EmptyCell>
+            </EmptyRow>
           )}
         </tbody>
       </StyledTable>
