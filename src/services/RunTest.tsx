@@ -53,7 +53,7 @@ const ResultValue = styled.span`
   border: 1px solid #e6e8eb;
 `;
 
-const StatusBadge = styled.span`
+const StatusBadge = styled.span<{ passed: boolean }>`
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -96,7 +96,7 @@ const ExpectationsList = styled.div`
   margin-top: 6px;
 `;
 
-const ExpectationItem = styled.div`
+const ExpectationItem = styled.div<{ status: "passed" | "failed" }>`
   padding: 10px 12px;
   background: ${(props) => (props.status === "passed" ? "#f0fdf4" : "#fff2f0")};
   border: 1px solid

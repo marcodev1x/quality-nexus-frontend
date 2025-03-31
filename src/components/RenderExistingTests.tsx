@@ -4,7 +4,7 @@ import GetToken from "../services/GetToken";
 import useApi from "../hooks/useApi";
 import { TestsList } from "../Interfaces/TestsList";
 import styled from "styled-components";
-import { FiTrash, FiInfo, FiPlay } from "react-icons/fi";
+import { FiTrash, FiInfo } from "react-icons/fi";
 import Loader from "../helpers/Loader";
 import Toast from "../helpers/Toast";
 import ToastSuccess from "../helpers/ToastSuccess";
@@ -89,7 +89,7 @@ const EmptyCell = styled(TableCell)`
   font-style: italic;
 `;
 
-const MethodBadge = styled.span`
+const MethodBadge = styled.span<{ method: string }>`
   display: inline-block;
   padding: 4px 12px;
   border-radius: 30px;

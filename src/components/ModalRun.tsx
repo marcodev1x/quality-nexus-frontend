@@ -170,7 +170,7 @@ const ButtonContainer = styled.div`
   margin-top: 8px;
 `;
 
-const MethodBadge = styled.span`
+const MethodBadge = styled.span<{ method: string }>`
   display: inline-block;
   padding: 4px 8px;
   border-radius: 4px;
