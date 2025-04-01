@@ -5,6 +5,6 @@ export interface InputProps extends React.ComponentProps<"input"> {
   name: string;
   type: string;
   labelColor?: string;
-  value: string;
+  value?: string;
   size?: string;
 }

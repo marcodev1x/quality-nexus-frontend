@@ -6,7 +6,10 @@ export type TestRunResponse = {
   response: [] | object | string | null;
   expectations: {
     key: string;
-    passed?: boolean;
+    passed: {
+      status: boolean;
+      found: unknown;
+    };
     operator: string;
     value: string;
     error?: string;

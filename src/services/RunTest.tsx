@@ -164,6 +164,14 @@ const NoErrorsBadge = styled.div`
   font-weight: 500;
 `;
 
+const LoaderWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  min-height: 300px;
+`;
+
 const RunTest = ({
   test,
   onRunningChange,
@@ -184,38 +192,42 @@ const RunTest = ({
       onRunningChange(true);
     }
 
-    try {
-      const response = await axios.post(
-        `${EnvsVars.API_URL}/tests/run-tests`,
-        {
-          id: test.id,
-          description: test.description,
-          type: test.type,
-          config: test.config,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${GetToken()}`,
+    setTimeout(async () => {
+      try {
+        const response = await axios.post(
+          `${EnvsVars.API_URL}/tests/run-tests`,
+          {
+            id: test.id,
+            description: test.description,
+            type: test.type,
+            config: test.config,
           },
-        },
-      );
-      setRunTest(response.data);
-    } catch (err) {
-      setError(err as string);
-      console.error(err);
-    } finally {
-      setIsRunning(false);
-      setIsLoading(false);
-      if (onRunningChange) {
-        onRunningChange(false);
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${GetToken()}`,
+            },
+          },
+        );
+        setRunTest(response.data);
+      } catch (err) {
+        setError(err as string);
+        console.error(err);
+      } finally {
+        setIsRunning(false);
+        setIsLoading(false);
       }
-    }
+    }, 2820);
   }, [test, onRunningChange]);
 
   if (error) return <Toast message={"Erro ao executar o teste"} />;
 
-  if (isLoading) return <Loader />;
+  if (isLoading)
+    return (
+      <LoaderWrapper>
+        <Loader />
+      </LoaderWrapper>
+    );
 
   const returnResponse = () => {
     if (!runTest?.APIResponse) return;
@@ -232,15 +244,18 @@ const RunTest = ({
 
     if (runTest?.expectations.length > 0) {
       return runTest.expectations.map((r, index) => (
-        <ExpectationItem key={index} status={r.error ? "failed" : "passed"}>
+        <ExpectationItem
+          key={index}
+          status={r.error || !r.passed ? "failed" : "passed"}
+        >
           <ExpectationIcon>
-            {r.error ? (
+            {r.error || !r.passed ? (
               <FiXCircle color="#e53e3e" />
             ) : (
               <FiCheckCircle color="#2ecc71" />
             )}
           </ExpectationIcon>
-          {JSON.stringify(r)}
+          {`Chave API: ${r.key} - Operador: ${r.operator} - Valor esperado: ${r.value}\n -> Valor retornado: ${r.passed?.found ?? "N/A"}\n`}
         </ExpectationItem>
       ));
     }
@@ -256,7 +271,10 @@ const RunTest = ({
         .filter((exp) => exp.error)
         .map((exp, index) => (
           <ErrorDetail key={index}>
-            <div>Expectativa: {JSON.stringify(exp)}</div>
+            <div>
+              Expectativa:{" "}
+              {`Chave API: ${exp.key} - Operador: ${exp.operator} - Valor esperado: ${exp.value} - Erro retornado: ${exp.error}`}
+            </div>
             <div>Erro: {exp.error}</div>
           </ErrorDetail>
         ));

@@ -14,7 +14,7 @@ const InputStyle = styled.div<InputProps>`
   a {
     text-decoration: none;
   }
-
+  
   input {
     padding: 10px;
     border: 1px solid #2ecc71;

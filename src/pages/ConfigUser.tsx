@@ -15,7 +15,7 @@ import Loader from "../helpers/Loader";
 const PageTitle = styled.h1`
   font-size: 2.5rem;
   margin-bottom: 2.5rem;
-  font-family: "Sedgwick Ave Display";
+  font-family: "Sedgwick Ave Display", "cursive";
   color: #2ecc71;
   letter-spacing: 0.1rem;
 `;
@@ -81,8 +81,6 @@ const ConfigUser = () => {
       setIsEditing(false);
     }
   };
-
-  console.log(error);
 
   return (
     <>

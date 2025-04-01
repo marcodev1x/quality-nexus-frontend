@@ -11,6 +11,10 @@ export interface TestsList {
     body: string;
     expectations: {
       key: string;
+      passed?: {
+        status?: boolean;
+        found?: unknown;
+      };
       value: string;
       operator: string;
     }[];
