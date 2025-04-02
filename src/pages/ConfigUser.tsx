@@ -69,6 +69,7 @@ const ConfigUser = () => {
         { headers: { Authorization: `Bearer ${GetToken()}` } },
       );
 
+      console.log(response);
       setIsEditing(false);
       setToast(true);
 
