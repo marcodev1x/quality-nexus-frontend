@@ -15,6 +15,14 @@ import FirstTopContainer from "../components/FirstTopContainer";
 import RenderExistingTests from "../components/RenderExistingTests";
 import DynamicExpecationInput from "../components/DynamicExpecationInput";
 import EnvsVars from "../services/EnvsVars";
+import {
+  FiPlus,
+  FiServer,
+  FiEdit3,
+  FiSettings,
+  FiCode,
+  FiCheckCircle,
+} from "react-icons/fi";
 
 const IntegrationContainer = styled.div`
   display: flex;
@@ -26,38 +34,81 @@ const IntegrationContainer = styled.div`
 const StyledForm = styled.form`
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  background: #fff;
-  padding: 24px;
-  border-radius: 12px;
-  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+  gap: 24px;
+  background: #ffffff;
+  padding: 32px;
+  border-radius: 16px;
+  box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.08);
   max-width: 900px;
   min-height: 400px;
   width: 100%;
   margin: auto;
-  justify-content: center;
-  align-items: center;
+  margin-bottom: 40px;
+`;
+
+const FormHeader = styled.div`
+  text-align: center;
+  margin-bottom: 8px;
 `;
 
 const FormTitle = styled.h2`
-  font-size: 22px;
+  font-size: 26px;
   font-weight: 600;
-  color: #222;
-  margin-bottom: 8px;
-  text-align: center;
+  color: #333;
+  margin-bottom: 12px;
+  position: relative;
+  display: inline-block;
+
+  &:after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: -8px;
+    width: 60px;
+    height: 3px;
+    background: #2ecc71;
+    transform: translateX(-50%);
+    border-radius: 2px;
+  }
 `;
 
 const FormSubtitle = styled.p`
-  font-size: 14px;
+  font-size: 15px;
   color: #666;
   text-align: center;
-  margin-bottom: 16px;
+  margin-bottom: 8px;
 `;
 
 const ButtonContainer = styled.div`
   display: flex;
   justify-content: center;
-  margin-top: 8px;
+  margin-top: 16px;
+  gap: 12px;
+`;
+
+const SectionTitle = styled.h3`
+  font-size: 16px;
+  font-weight: 600;
+  color: #444;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  svg {
+    color: #2ecc71;
+  }
+`;
+
+const FormSection = styled.div`
+  background: #f8fafc;
+  padding: 20px;
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
+`;
+
+const AddButtonContainer = styled(FirstTopContainer)`
+  margin-bottom: 24px;
 `;
 
 const Integration = () => {
@@ -135,78 +186,115 @@ const Integration = () => {
     }
   };
 
-  console.log(expectations);
-
   return (
     <ContainerMid>
       {error && <Toast message={error} />}
       {!isLoading && !addTest && (
-        <FirstTopContainer>
+        <AddButtonContainer>
           <ComponentButton
             label="Adicionar teste"
             size="large"
             variant="primary"
             onClick={() => setAddTest(true)}
+            icon={<FiPlus size={18} />}
           />
-        </FirstTopContainer>
+        </AddButtonContainer>
       )}
       {!isLoading && !addTest && <RenderExistingTests />}
       {isLoading && <Loader />}
       {!isLoading && addTest && (
-        <StyledForm
-          onSubmit={sendForm}
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: "16px",
-            marginTop: "48px",
-          }}
-        >
-          <FormTitle>Novo Teste</FormTitle>
-          <FormSubtitle>
-            Defina os detalhes do seu teste de integração
-          </FormSubtitle>
+        <StyledForm onSubmit={sendForm}>
+          <FormHeader>
+            <FormTitle>Novo Teste de Integração</FormTitle>
+            <FormSubtitle>
+              Configure os parâmetros do seu teste de API
+            </FormSubtitle>
+          </FormHeader>
+
           <IntegrationContainer>
-            <TextArea
-              label="Descreva seu teste"
-              labelColor="#222"
-              name="description"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              required
-              placeholder="Descreva seu teste"
-            />
-            <InputSelect
-              label="Selecione o método HTTP"
-              options={arrayOptions}
-              changeState={setSelectedMethod}
-              required
-            />
-            <Input
-              labelColor="#222"
-              label="URL"
-              name="url"
-              value={url}
-              onChange={(e) => setUrl(e.target.value)}
-              type="url"
-              required
-            />
-            <DynamicHeaders headers={headers} setHeaders={setHeaders} />
-            <DynamicExpecationInput
-              expectation={expectations}
-              setExpectations={setExpectations}
-            />
-            <TextArea
-              label="Corpo da requisição"
-              labelColor="#222"
-              name="body"
-              value={body}
-              onChange={(e) => setBody(e.target.value)}
-              placeholder="Corpo da requisição"
-            />
+            <FormSection>
+              <SectionTitle>
+                <FiEdit3 />
+                Informações Básicas
+              </SectionTitle>
+              <TextArea
+                label="Descrição do teste"
+                labelColor="#333"
+                name="description"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                required
+                placeholder="Ex: Verificar se a API de usuários retorna status 200"
+              />
+            </FormSection>
+
+            <FormSection>
+              <SectionTitle>
+                <FiServer />
+                Configuração da Requisição
+              </SectionTitle>
+              <div
+                style={{ display: "flex", gap: "16px", marginBottom: "16px" }}
+              >
+                <div style={{ width: "30%" }}>
+                  <InputSelect
+                    label="Método HTTP"
+                    options={arrayOptions}
+                    changeState={setSelectedMethod}
+                    required
+                  />
+                </div>
+                <div style={{ width: "70%" }}>
+                  <Input
+                    labelColor="#333"
+                    label="URL da API"
+                    name="url"
+                    value={url}
+                    onChange={(e) => setUrl(e.target.value)}
+                    type="url"
+                    required
+                    placeholder="https://api.exemplo.com/recurso"
+                  />
+                </div>
+              </div>
+
+              <SectionTitle>
+                <FiSettings />
+                Headers
+              </SectionTitle>
+              <DynamicHeaders headers={headers} setHeaders={setHeaders} />
+            </FormSection>
+
+            <FormSection>
+              <SectionTitle>
+                <FiCheckCircle />
+                Expectativas de Resposta
+              </SectionTitle>
+              <DynamicExpecationInput
+                expectation={expectations}
+                setExpectations={setExpectations}
+              />
+            </FormSection>
+
+            <FormSection>
+              <SectionTitle>
+                <FiCode />
+                Corpo da Requisição
+              </SectionTitle>
+              <TextArea
+                label="JSON ou outros dados a serem enviados"
+                labelColor="#333"
+                name="body"
+                value={body}
+                onChange={(e) => setBody(e.target.value)}
+                placeholder='{"chave": "valor"}'
+                rows={6}
+              />
+            </FormSection>
+
             <ButtonContainer>
               <ComponentButton
-                label="Salvar teste"
+                label="Salvar Teste"
                 variant="primary"
                 size="large"
                 type="submit"
