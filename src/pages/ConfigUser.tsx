@@ -62,7 +62,7 @@ const ConfigUser = () => {
         `${EnvsVars.API_URL}/user/update`,
         {
           email: user?.email,
-          senha: senha,
+          senha: senha || undefined,
           nome: nome,
           newEmail: email || user?.email,
         },
