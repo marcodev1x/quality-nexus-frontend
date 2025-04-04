@@ -226,7 +226,7 @@ const RunTest = ({
       runTest.APIResponse.map((r) => r);
     }
 
-    return JSON.stringify(runTest.APIResponse);
+    return JSON.stringify(runTest.APIResponse, null, 2);
   };
 
   const returnExpectationsMapping = () => {

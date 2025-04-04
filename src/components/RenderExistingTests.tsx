@@ -163,13 +163,6 @@ const Description = styled.div`
   color: #333;
 `;
 
-const IdCell = styled(TableCell)`
-  font-weight: 600;
-  color: #2ecc71;
-  text-align: center;
-  width: 60px;
-`;
-
 const ActionsCell = styled(TableCell)`
   width: 80px;
   text-align: center;
@@ -317,7 +310,6 @@ const RenderExistingTests = () => {
       <StyledTable>
         <TableHeader>
           <tr>
-            <TableHeaderCell>Id</TableHeaderCell>
             <TableHeaderCell>Descrição</TableHeaderCell>
             <TableHeaderCell>Método</TableHeaderCell>
             <TableHeaderCell>URL</TableHeaderCell>
@@ -329,7 +321,6 @@ const RenderExistingTests = () => {
           {tests.length > 0 ? (
             tests.map((test, id) => (
               <TableRow key={id} onClick={() => handleModalOpenning(test)}>
-                <IdCell>{id + 1}</IdCell>
                 <TableCell>
                   <Description>{test.description}</Description>
                 </TableCell>
