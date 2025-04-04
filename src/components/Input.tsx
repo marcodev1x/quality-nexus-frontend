@@ -39,7 +39,6 @@ const Input = ({
   type,
   value,
   labelColor,
-  size,
   ...props
 }: InputProps) => {
   return (

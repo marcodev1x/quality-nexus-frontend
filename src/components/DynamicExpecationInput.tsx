@@ -74,7 +74,7 @@ export const operatorOptions = [
   "exists",
   "notExists",
   "length",
-  "lenght.above",
+  "length.above",
 ];
 
 const DynamicExpecationInput = ({
