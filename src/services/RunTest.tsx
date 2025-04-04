@@ -67,16 +67,6 @@ const StatusBadge = styled.span<{ passed: boolean }>`
   border: 1px solid ${(props) => (props.passed ? "#b7eb8f" : "#ffccc7")};
 `;
 
-const Duration = styled.span`
-  background: #f0f5ff;
-  color: #1890ff;
-  padding: 4px 8px;
-  border-radius: 4px;
-  font-weight: 500;
-  margin-left: 8px;
-  font-size: 12px;
-`;
-
 const ErrorValue = styled.span`
   padding: 12px;
   background: #fff2f0;
@@ -298,14 +288,6 @@ const RunTest = ({
           <ResultItem>
             <ResultLabel>Status:</ResultLabel>
             <ResultValue>{runTest.status}</ResultValue>
-          </ResultItem>
-
-          <ResultItem>
-            <ResultLabel>Tempo de execução:</ResultLabel>
-            <ResultValue>
-              {runTest.duration} ms
-              <Duration>{runTest.duration} ms</Duration>
-            </ResultValue>
           </ResultItem>
 
           <ResultItem>
