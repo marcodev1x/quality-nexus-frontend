@@ -3,11 +3,12 @@ import styled from "styled-components";
 import { useLocalStorage } from "../hooks/useLocalStorage";
 import ComponentButton from "../components/Button";
 import Input from "../components/Input";
-import axios from "axios";
+import axios, {AxiosResponse} from "axios";
 import Toast from "../helpers/Toast";
 import SubTextWithLink from "../helpers/SubTextWithLink";
 import { useNavigate } from "react-router";
 import Loader from "../helpers/Loader";
+import {LoginResponse} from "../types/LoginResponse.ts";
 
 const LoginContainer = styled.div`
   display: flex;
@@ -138,7 +139,7 @@ const LoginPage = () => {
         return;
       }
 
-      const response = await axios.post("http://localhost:3000/user/login", {
+      const response: AxiosResponse<LoginResponse | null> = await axios.post("http://localhost:3000/user/login", {
         email: emailInput,
         password: passwordInput,
       });
