@@ -1,7 +1,6 @@
 import styled from "styled-components";
 
 import {
-  FiGitBranch,
   FiHome,
   FiLoader,
   FiLogOut,
@@ -144,29 +143,13 @@ const LateralMenu = () => {
           </li>
         </NavLink>
         <NavLink
-          to="/interno/performance"
-          style={{ textDecoration: "none" }}
-          className={
-            location.pathname === "/interno/performance" ? "active" : ""
-          }
-        >
-          <li
-            className={
-              location.pathname === "/interno/performance" ? "active" : ""
-            }
-          >
-            <FiGitBranch />
-            Performance
-          </li>
-        </NavLink>
-        <NavLink
           to="/interno/load"
           style={{ textDecoration: "none" }}
           className={location.pathname === "/interno/load" ? "active" : ""}
         >
           <li className={location.pathname === "/interno/load" ? "active" : ""}>
             <FiLoader />
-            Carregamento
+            Carga
           </li>
         </NavLink>
         <NavLink

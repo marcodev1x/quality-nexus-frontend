@@ -1,4 +1,4 @@
-import { FiGitBranch, FiLoader, FiPercent } from "react-icons/fi";
+import { FiLoader, FiPercent } from "react-icons/fi";
 import ComponentButton from "../components/Button";
 import CardAtalho from "../components/CardAtalho";
 import styled from "styled-components";
@@ -36,19 +36,6 @@ const DashboardPage = () => {
             to="/interno/integration"
             icon={<FiPercent />}
             description="Realize testes de integração rapidamente."
-            button={
-              <ComponentButton
-                label="Acessar"
-                size="medium"
-                variant="primary"
-              />
-            }
-          />
-          <CardAtalho
-            title="Testes de performance"
-            to="/interno/performance"
-            icon={<FiGitBranch />}
-            description="Realize testes de performance rapidamente."
             button={
               <ComponentButton
                 label="Acessar"
