@@ -6,11 +6,12 @@ import styled from "styled-components";
 const CardsContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
+  justify-content: start;
   gap: 16px;
   width: 100%;
 
   padding: 20px;
+    margin-left: 80px;
   transition: margin-left 0.3s ease-in-out;
 
   @media (max-width: 768px) {

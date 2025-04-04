@@ -4,11 +4,10 @@ import styled from "styled-components";
 const Container = styled.div`
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
-  gap: 24px;
+  justify-content: start;
+  align-items: start;
   max-width: 100%;
-  padding: 24px;
+  padding: 44px;
   margin: 0 auto;
   @media (max-width: 1024px) {
     gap: 16px;

@@ -12,7 +12,7 @@ import ModalRun from "./ModalRun.tsx";
 import EnvsVars from "../services/EnvsVars";
 
 const TableContainer = styled.div`
-  width: 90%;
+  width: 100%;
   margin: 24px;
   overflow-x: auto;
   border-radius: 12px;
@@ -255,7 +255,7 @@ const RenderExistingTests = () => {
 
     return expectations
       .map((expectation) => {
-        return `{Chave API: ${expectation.key} - Operador: ${expectation.operator} - Esperado: ${expectation.value}}`;
+        return `Chave API: ${expectation.key} - Operador: ${expectation.operator} - Esperado: ${expectation.value}`;
       })
       .join(", ");
   };
@@ -313,7 +313,7 @@ const RenderExistingTests = () => {
             <TableHeaderCell>Descrição</TableHeaderCell>
             <TableHeaderCell>Método</TableHeaderCell>
             <TableHeaderCell>URL</TableHeaderCell>
-            <TableHeaderCell>Expectations</TableHeaderCell>
+            <TableHeaderCell>Expectativas</TableHeaderCell>
             <TableHeaderCell>Ações</TableHeaderCell>
           </tr>
         </TableHeader>

@@ -43,7 +43,6 @@ const StyledForm = styled.form`
   min-height: 400px;
   width: 100%;
   margin: auto;
-  margin-bottom: 40px;
 `;
 
 const FormHeader = styled.div`
