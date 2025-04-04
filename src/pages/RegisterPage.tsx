@@ -223,7 +223,7 @@ const RegisterPage = () => {
           <ComponentButton
             label="Registrar-se"
             size="small"
-            variant="primary"
+            variant="secondary"
             type="submit"
           />
           {isLoading && <Loader />}

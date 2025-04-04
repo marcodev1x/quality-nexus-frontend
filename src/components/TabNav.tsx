@@ -12,7 +12,6 @@ const Nav = styled.nav`
 
 const StyledNavLink = styled(NavLink)`
   text-decoration: none;
-  border-top: 3px solid #1ecc71;
   color: #1a202c;
   padding: 1rem 1.65rem;
 
@@ -20,8 +19,8 @@ const StyledNavLink = styled(NavLink)`
 
   &.active {
     background-color: rgba(46, 604, 13, 0.2);
-    color: #2ecc71;
-    font-weight: bold;
+    color: #1ecc71;
+    border-top: 3px solid #1ecc71;
   }
 
   &:hover {

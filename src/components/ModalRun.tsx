@@ -30,7 +30,6 @@ const ModalContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: start;
-  width: 100%;
   overflow: hidden;
   max-height: 85vh;
   overflow-y: auto;

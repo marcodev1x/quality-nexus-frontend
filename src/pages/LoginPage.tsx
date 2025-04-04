@@ -76,7 +76,7 @@ const LoginContainer = styled.div`
 
   section .wave span:nth-child(2) {
     border-radius: 40%;
-    background: ##2ecc71;
+    background: rgb(255, 249, 233);
     animation: animate 10s linear infinite;
   }
 
@@ -144,16 +144,22 @@ const LoginPage = () => {
         password: passwordInput,
       });
 
-      if (response.data) {
+      if(response.status === 401) {
+        setError('Credenciais inválidas');
+        setIsLoading(false);
+        return;
+      }
+
+      if (response.data?.user) {
         setValue(response.data.user.token);
         navigate("/home");
         setError(null);
-      } else {
-        setError("Dados inválidos");
       }
+
     } catch (err) {
       console.error(err);
-      setError("Erro ao conectar ao servidor");
+      if(axios.isAxiosError(err) && err.status === 401) return setError('Credenciais inválidas');
+      setError('Ocorreu um erro ao tentar fazer login');
     } finally {
       setIsLoading(false);
     }
@@ -191,8 +197,9 @@ const LoginPage = () => {
           <ComponentButton
             label="Login"
             size="small"
-            variant="primary"
+            variant="secondary"
             type="submit"
+            style={{marginTop: "1rem"}}
             disabled={isLoading}
           />
           {isLoading && <Loader />}
