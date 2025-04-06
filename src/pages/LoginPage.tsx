@@ -158,7 +158,7 @@ const LoginPage = () => {
 
     } catch (err) {
       console.error(err);
-      if(axios.isAxiosError(err) && err.status === 401) return setError('Credenciais inválidas');
+      if(axios.isAxiosError(err) && err.status === 401 || axios.isAxiosError(err) && err.status === 400) return setError('Credenciais inválidas');
       setError('Ocorreu um erro ao tentar fazer login');
     } finally {
       setIsLoading(false);

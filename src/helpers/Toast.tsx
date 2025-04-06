@@ -9,23 +9,22 @@ const Toast = ({
   position?: ToastPosition;
 }) => {
   React.useEffect(() => {
-    const notify = () => toast(message);
+    const notify = () => toast.error(message);
     notify();
   }, [message]);
 
   return (
     <div>
       <ToastContainer
-        style={{ padding: "1rem" }}
         position={position}
         autoClose={3000}
-        hideProgressBar={true}
+        hideProgressBar={false}
         newestOnTop={false}
         closeOnClick={true}
         rtl={false}
         pauseOnFocusLoss
-        draggable
-        theme="dark"
+        draggable={true}
+        theme='dark'
       />
     </div>
   );

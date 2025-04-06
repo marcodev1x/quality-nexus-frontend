@@ -51,7 +51,6 @@ const TableRow = styled.tr`
 
   &:hover {
     background: rgba(46, 204, 113, 0.1);
-    border-left: 3px solid #2ecc71;
     transition: all 0.3s ease;
   }
 
@@ -245,7 +244,7 @@ const RenderExistingTests = () => {
   }
 
   if (error) {
-    return <Toast message="Erro ao carregar os testes" />;
+    return <Toast position={"top-right"} message="Erro ao carregar os testes" />;
   }
 
   const renderExpectations = (
