@@ -2,7 +2,7 @@ import React from "react";
 import { TestsList } from "../Interfaces/TestsList.tsx";
 import styled from "styled-components";
 import ContainerMid from "./ContainerMid.tsx";
-import { FiX, FiExternalLink, FiCode, FiCheckCircle } from "react-icons/fi";
+import {FiX, FiExternalLink, FiCode, FiCheckCircle, FiUser, FiWatch} from "react-icons/fi";
 import RunTest from "../services/RunTest.tsx";
 
 const Background = styled.div`
@@ -266,6 +266,11 @@ const ModalRun = ({
 
   if (!test) return null;
 
+  const formatTime = (testTime: number) => {
+    return `${testTime} segundos`
+  }
+
+
   if (isOpen && test) {
     return (
       <ContainerMid>
@@ -321,21 +326,44 @@ const ModalRun = ({
                         : test.config.body || "N/A"}
                     </ConfigItem>
                   </ConfigText>
-
-                  <ConfigText>
-                    <ConfigSectionTitle>
-                      <FiCheckCircle />
-                      Expectativas
-                    </ConfigSectionTitle>
-                    {typeof renderExpectations(test.config.expectations) ===
-                    "string" ? (
-                      <ConfigItem>
-                        {renderExpectations(test.config.expectations)}
-                      </ConfigItem>
-                    ) : (
-                      renderExpectations(test.config.expectations)
-                    )}
-                  </ConfigText>
+                  {test.type === 'integration' && (
+                      <ConfigText>
+                        <ConfigSectionTitle>
+                          <FiCheckCircle />
+                          Expectativas
+                        </ConfigSectionTitle>
+                        {typeof renderExpectations(test.config.expectations) ===
+                        "string" ? (
+                            <ConfigItem>
+                              {renderExpectations(test.config.expectations)}
+                            </ConfigItem>
+                        ) : (
+                            renderExpectations(test.config.expectations)
+                        )}
+                      </ConfigText>
+                  )}
+                  {test.type === 'load' && (
+                      <div style={{ display: "flex", gap: '16px', flexDirection: 'column' }}>
+                        <ConfigText>
+                          <ConfigSectionTitle>
+                            <FiUser />
+                            Qntd. de usuários simulados
+                          </ConfigSectionTitle>
+                          <ConfigItem>
+                            {test.config.usersQt}
+                          </ConfigItem>
+                        </ConfigText>
+                        <ConfigText>
+                          <ConfigSectionTitle>
+                            <FiWatch />
+                            Tempo de teste
+                          </ConfigSectionTitle>
+                          <ConfigItem>
+                            {formatTime(test.config.time || 0)}
+                          </ConfigItem>
+                        </ConfigText>
+                      </div>
+                  )}
                 </ConfigContainer>
                 <ButtonContainer></ButtonContainer>
               </>

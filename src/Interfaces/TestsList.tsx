@@ -18,5 +18,8 @@ export interface TestsList {
       value: string;
       operator: string;
     }[];
+    workersthreads?: number;
+    usersQt?: number;
+    time?: number;
   };
 }

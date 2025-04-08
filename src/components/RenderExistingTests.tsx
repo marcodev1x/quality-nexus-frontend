@@ -10,6 +10,7 @@ import Toast from "../helpers/Toast";
 import ToastSuccess from "../helpers/ToastSuccess";
 import ModalRun from "./ModalRun.tsx";
 import EnvsVars from "../services/EnvsVars";
+import {useLocation} from "react-router";
 
 const TableContainer = styled.div`
   width: 100%;
@@ -215,6 +216,8 @@ const RenderExistingTests = () => {
     null,
   );
 
+  const location = useLocation();
+
   const headerMemo = React.useMemo(() => {
     return new AxiosHeaders({
       "Content-Type": "application/json",
@@ -233,11 +236,16 @@ const RenderExistingTests = () => {
     headerMemo,
   );
 
-  React.useEffect(() => {
+    React.useEffect(() => {
     if (userTests) {
-      setTests(userTests);
+      const filteringTypesIntegration = userTests.filter(test => test.type === 'integration');
+      const filteringTypesLoad = userTests.filter(test => test.type === 'load');
+      console.log(tests)
+
+      if(location.pathname === '/interno/integration') setTests(filteringTypesIntegration);
+      if(location.pathname === '/interno/load') setTests(filteringTypesLoad);
     }
-  }, [userTests]);
+  }, [userTests, location]);
 
   if (isLoading) {
     return <Loader />;

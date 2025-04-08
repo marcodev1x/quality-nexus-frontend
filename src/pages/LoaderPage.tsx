@@ -1,9 +1,10 @@
 import ContainerMid from "../components/ContainerMid";
+import RenderExistingTests from "../components/RenderExistingTests.tsx";
 
 const LoaderPage = () => {
   return (
     <ContainerMid>
-      <h1>Carregamento</h1>
+      <RenderExistingTests  />
     </ContainerMid>
   );
 };

@@ -122,7 +122,7 @@ const Integration = () => {
   >([]);
   const [body, setBody] = React.useState<string>("");
   const [description, setDescription] = React.useState<string>("");
-  const [addTest, setAddTest] = React.useState(false);
+  const [addTest, setAddTest] = React.useState<boolean>(false);
   const [expectations, setExpectations] = React.useState<
     { key: string; expected: string; value: string }[]
   >([]);
