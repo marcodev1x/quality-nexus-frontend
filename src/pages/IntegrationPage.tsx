@@ -187,7 +187,7 @@ const Integration = () => {
 
   return (
     <ContainerMid>
-      {error && <Toast message={error} />}
+      {error && <Toast message={error} position={'top-right'} />}
       {!isLoading && !addTest && (
         <AddButtonContainer>
           <ComponentButton

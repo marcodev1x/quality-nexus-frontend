@@ -99,9 +99,9 @@ const LateralMenu = () => {
 
   const filterPlan = () => {
     if (user?.role === "free") {
-      return "Gratuito";
-    } else if (user?.role === "paid") {
-      return "Pago";
+      return "Plano gratuito";
+    } else if (user?.role === "plan") {
+      return "Plano pago";
     } else {
       return "Guest";
     }

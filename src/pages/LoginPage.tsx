@@ -167,7 +167,7 @@ const LoginPage = () => {
 
   return (
     <LoginContainer>
-      {error && <Toast message={error} position="top-left" />}
+      {error && <Toast message={error} position="top-right" />}
       <LoginCard>
         <Title>Bem-vindo de volta ao</Title>
         <form onSubmit={sendForm}>

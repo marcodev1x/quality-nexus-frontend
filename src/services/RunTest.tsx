@@ -210,7 +210,7 @@ const RunTest = ({
     }, 2820);
   }, [test, onRunningChange]);
 
-  if (error) return <Toast message={"Erro ao executar o teste"} />;
+  if (error) return <Toast message={"Erro ao executar o teste"} position={'top-right'} />;
 
   if (isLoading)
     return (

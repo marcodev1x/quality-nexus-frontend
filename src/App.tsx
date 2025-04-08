@@ -11,6 +11,7 @@ import LoaderPage from "./pages/LoaderPage";
 import ProtectedPage from "./pages/ProtectedPage";
 import EnvsVars from "./services/EnvsVars";
 import ConfigUser from "./pages/ConfigUser";
+import PlanUser from "./pages/PlanUser.tsx";
 
 function App() {
   console.log(EnvsVars);
@@ -27,7 +28,7 @@ function App() {
               <Route path="/configuracoes/user" element={<ConfigUser />} />
               <Route
                 path="/configuracoes/plan"
-                element={<div>Plano Page</div>}
+                element={<PlanUser/>}
               />
             </Route>
             <Route path="/interno/integration" element={<Integration />} />
