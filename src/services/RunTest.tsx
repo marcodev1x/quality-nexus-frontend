@@ -182,51 +182,65 @@ const RunTest = ({
       onRunningChange(true);
     }
 
-    if(test.type === 'integration'){
-      setTimeout(async () => {
-        try {
-          const response = await axios.post(
-              `${EnvsVars.API_URL}/tests/run-tests`,
-              {
-                id: test.id,
-                description: test.description,
-                type: test.type,
-                config: test.config,
-              },
-              {
-                headers: {
-                  "Content-Type": "application/json",
-                  Authorization: `Bearer ${GetToken()}`,
-                },
-              },
-          );
-          setRunTest(response.data);
-        } catch (err) {
-          setError(err as string);
-          console.error(err);
-        } finally {
-          setIsRunning(false);
-          setIsLoading(false);
-        }
-      }, 2820);
+    if (test.type === "integration") {
+      try {
+        const response = await axios.post(
+          `${EnvsVars.API_URL}/tests/run-tests`,
+          {
+            id: test.id,
+            description: test.description,
+            type: test.type,
+            config: test.config,
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${GetToken()}`,
+            },
+          },
+        );
+        setRunTest(response.data);
+      } catch (err) {
+        setError(err as string);
+        console.error(err);
+      } finally {
+        setIsRunning(false);
+        setIsLoading(false);
+      }
     }
 
-   if(test.type === 'load'){
-     setTimeout(async () => {
-       try{
-           const b = 'a'
-         console.log(b)
-       }catch(err){
-         setError(err as string);
-         console.error(err);
-       }finally {
-         setIsRunning(false);
-       }
-     }, 2820)
-   }
+    if (test.type === "load") {
+      try {
+        const response = await axios.post(
+          `${EnvsVars.API_URL}/tests/run-tests-load`,
+          {
+            id: test.id,
+            description: test.description,
+            type: test.type,
+            config: test.config,
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${GetToken()}`,
+            },
+          },
+        );
+        setRunTest(response.data);
+      } catch (err) {
+        setError(err as string);
+        console.error(err);
+      } finally {
+        setIsRunning(false);
+        setIsLoading(false);
+      }
+    }
   }, [test, onRunningChange]);
 
-  if (error) return <Toast message={"Erro ao executar o teste"} position={'top-right'} />;
+  if (error)
+    return (
+      <Toast message={"Erro ao executar o teste"} position={"top-right"} />
+    );
 
   if (isLoading)
     return (
