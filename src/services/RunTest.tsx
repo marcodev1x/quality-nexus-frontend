@@ -1,5 +1,5 @@
 import React from "react";
-import { TestRunResponse } from "../types/TestRunResponse";
+import { TestLoadResponse, TestRunResponse } from "../types/TestRunResponse";
 import { TestsList } from "../Interfaces/TestsList";
 import Toast from "../helpers/Toast";
 import axios from "axios";
@@ -51,6 +51,16 @@ const ResultValue = styled.span`
   max-height: 200px;
   overflow-y: auto;
   border: 1px solid #e6e8eb;
+  white-space: pre;
+`;
+
+const ResultValueLoad = styled.span`
+  padding: 8px 12px;
+  background: #f7f9fc;
+  font-family: monospace;
+  word-break: break-all;
+  max-height: 200px;
+  overflow-y: auto;
 `;
 
 const StatusBadge = styled.span<{ passed: boolean }>`
@@ -170,6 +180,9 @@ const RunTest = ({
   onRunningChange?: (running: boolean) => void;
 }) => {
   const [runTest, setRunTest] = React.useState<TestRunResponse | null>(null);
+  const [runLoadTest, setRunLoadTest] = React.useState<TestLoadResponse | null>(
+    null,
+  );
   const [isLoading, setIsLoading] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
   const [isRunning, setIsRunning] = React.useState<boolean>(false);
@@ -226,7 +239,7 @@ const RunTest = ({
             },
           },
         );
-        setRunTest(response.data);
+        setRunLoadTest(response.data);
       } catch (err) {
         setError(err as string);
         console.error(err);
@@ -257,6 +270,12 @@ const RunTest = ({
     }
 
     return JSON.stringify(runTest.APIResponse, null, 2);
+  };
+
+  const returnLoadResponse = () => {
+    if (!runLoadTest) return;
+
+    return JSON.stringify(runLoadTest, null, 2);
   };
 
   const returnExpectationsMapping = () => {
@@ -310,63 +329,112 @@ const RunTest = ({
     return runTest.expectations.some((exp) => exp.error);
   };
 
-  return (
-    <>
-      {runTest && (
+  if (runTest && test.type === "integration") {
+    return (
+      <>
+        {runTest && (
+          <ResultContent>
+            <ResultTitle>Resultado do teste</ResultTitle>
+            <ResultItem>
+              <ResultLabel>Status:</ResultLabel>
+              <ResultValue>{runTest.status}</ResultValue>
+            </ResultItem>
+
+            <ResultItem>
+              <ResultLabel>Corpo da resposta:</ResultLabel>
+              <ResultValue>{returnResponse()}</ResultValue>
+            </ResultItem>
+
+            <ResultItem>
+              <ResultLabel>
+                {runTest.passed ? (
+                  <FiCheckCircle color="#2ecc71" />
+                ) : (
+                  <FiXCircle color="#e53e3e" />
+                )}
+                Resultado:
+              </ResultLabel>
+              <ResultValue>
+                {runTest.passed ? "PASSOU" : "NÃO PASSOU"}
+                <StatusBadge passed={runTest.passed}>
+                  {runTest.passed ? "SUCESSO" : "FALHA"}
+                </StatusBadge>
+              </ResultValue>
+            </ResultItem>
+
+            {!runTest.passed && (
+              <ResultItem>
+                <ResultLabel>
+                  <FiAlertCircle color="#e53e3e" />
+                  Erros encontrados:
+                </ResultLabel>
+                {runTest.error ? (
+                  <ErrorValue>{runTest.error}</ErrorValue>
+                ) : hasExpectationErrors() ? (
+                  <ErrorsList>{findExpectationErrors()}</ErrorsList>
+                ) : (
+                  <NoErrorsBadge>
+                    <FiCheckCircle />
+                    Sem erros nas expectativas
+                  </NoErrorsBadge>
+                )}
+              </ResultItem>
+            )}
+
+            <ResultItem>
+              <ResultLabel>Valor(es) esperado(s):</ResultLabel>
+              <ExpectationsList>{returnExpectationsMapping()}</ExpectationsList>
+            </ResultItem>
+          </ResultContent>
+        )}
+        <ComponentButton
+          onClick={handleRunTest}
+          label={isRunning ? "Executando..." : "Rodar teste novamente"}
+          size={"medium"}
+          variant={"primary"}
+          disabled={isRunning}
+        />
+      </>
+    );
+  }
+
+  if (runLoadTest && test.type === "load") {
+    return (
+      <>
         <ResultContent>
           <ResultTitle>Resultado do teste</ResultTitle>
           <ResultItem>
-            <ResultLabel>Status:</ResultLabel>
-            <ResultValue>{runTest.status}</ResultValue>
+            <ResultLabel>Registros de status:</ResultLabel>
+            <ResultValueLoad>Status 1xx: {runLoadTest["1xx"]}</ResultValueLoad>
+            <ResultValueLoad>Status 1xx: {runLoadTest["2xx"]}</ResultValueLoad>
+            <ResultValueLoad>Status 1xx: {runLoadTest["3xx"]}</ResultValueLoad>
+            <ResultValueLoad>Status 1xx: {runLoadTest["4xx"]}</ResultValueLoad>
+            <ResultValueLoad>Status 1xx: {runLoadTest["5xx"]}</ResultValueLoad>
           </ResultItem>
 
           <ResultItem>
             <ResultLabel>Corpo da resposta:</ResultLabel>
-            <ResultValue>{returnResponse()}</ResultValue>
+            <ResultValue>{returnLoadResponse()}</ResultValue>
           </ResultItem>
 
           <ResultItem>
             <ResultLabel>
-              {runTest.passed ? (
-                <FiCheckCircle color="#2ecc71" />
-              ) : (
-                <FiXCircle color="#e53e3e" />
-              )}
+              <ResultValue>{runLoadTest["1xx"]}</ResultValue>
               Resultado:
             </ResultLabel>
-            <ResultValue>
-              {runTest.passed ? "PASSOU" : "NÃO PASSOU"}
-              <StatusBadge passed={runTest.passed}>
-                {runTest.passed ? "SUCESSO" : "FALHA"}
-              </StatusBadge>
-            </ResultValue>
           </ResultItem>
-
-          {!runTest.passed && (
-            <ResultItem>
-              <ResultLabel>
-                <FiAlertCircle color="#e53e3e" />
-                Erros encontrados:
-              </ResultLabel>
-              {runTest.error ? (
-                <ErrorValue>{runTest.error}</ErrorValue>
-              ) : hasExpectationErrors() ? (
-                <ErrorsList>{findExpectationErrors()}</ErrorsList>
-              ) : (
-                <NoErrorsBadge>
-                  <FiCheckCircle />
-                  Sem erros nas expectativas
-                </NoErrorsBadge>
-              )}
-            </ResultItem>
-          )}
 
           <ResultItem>
             <ResultLabel>Valor(es) esperado(s):</ResultLabel>
             <ExpectationsList>{returnExpectationsMapping()}</ExpectationsList>
           </ResultItem>
         </ResultContent>
-      )}
+      </>
+    );
+  }
+
+  return (
+    <>
       <ComponentButton
         onClick={handleRunTest}
         label={isRunning ? "Executando..." : "Rodar teste"}

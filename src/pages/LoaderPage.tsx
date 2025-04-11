@@ -22,6 +22,7 @@ import axios from "axios";
 import EnvsVars from "../services/EnvsVars.ts";
 import GetToken from "../services/GetToken.tsx";
 import Toast from "../helpers/Toast.tsx";
+import ToastSuccess from "../helpers/ToastSuccess.tsx";
 
 const AddButtonContainer = styled(FirstTopContainer)`
   margin-bottom: 24px;
@@ -109,6 +110,7 @@ const FormSection = styled.div`
   border: 1px solid #e2e8f0;
 `;
 
+
 const LoaderPage = () => {
   const arrayOptions = ["GET", "POST", "PUT", "DELETE", "PATCH"];
   const [selectedMethod, setSelectedMethod] = React.useState(arrayOptions[0]);
@@ -123,8 +125,8 @@ const LoaderPage = () => {
   const [description, setDescription] = React.useState<string>("");
   const [addTest, setAddTest] = React.useState<boolean>(false);
   const [tooltip, setTooltip] = React.useState<boolean>(false);
-  const [workers, setWorkers] = React.useState<string>("");
-  const [connections, setConnections] = React.useState<string>("");
+  const [workers, setWorkers] = React.useState<string>("0");
+  const [connections, setConnections] = React.useState<string>("1");
   const [duration, setDuration] = React.useState<string>("");
 
   if (Number(workers) >= 17) {
@@ -136,9 +138,27 @@ const LoaderPage = () => {
     }, 4000);
   }
 
+  if (Number(workers) < 0) {
+    setWorkers("0");
+    setError("Mínimo de 0 workers");
+
+    setTimeout(() => {
+      setError(null);
+    }, 4000);
+  }
+
   if (Number(connections) > 1000) {
     setConnections("1000");
     setError("Máximo de 1000 connections");
+
+    setTimeout(() => {
+      setError(null);
+    }, 4000);
+  }
+
+  if (Number(connections) < 1) {
+    setConnections("1");
+    setError("Mínimo de 1 connection");
 
     setTimeout(() => {
       setError(null);
@@ -167,7 +187,7 @@ const LoaderPage = () => {
             method: selectedMethod,
             url,
             headers,
-            body,
+            body: JSON.parse(body),
             workersthreads: Number(workers),
             usersQt: Number(connections),
             time: Number(duration),
@@ -203,6 +223,7 @@ const LoaderPage = () => {
   return (
     <ContainerMid>
       {error && <Toast message={error} position={"top-right"} />}
+      {success && <ToastSuccess message={"Teste criado com sucesso"} />}
       {!isLoading && !addTest && (
         <AddButtonContainer>
           <ComponentButton
@@ -291,7 +312,6 @@ const LoaderPage = () => {
                     labelColor="#333"
                     label="Quantidade de conexões simultâneas"
                     name="connections"
-                    value={connections}
                     onChange={(e) => setConnections(e.target.value)}
                     type="number"
                     required
@@ -303,7 +323,6 @@ const LoaderPage = () => {
                     labelColor="#333"
                     label="Quantidade de Worker Threads"
                     name="workers"
-                    value={workers}
                     onChange={(e) => setWorkers(e.target.value)}
                     type="number"
                     required

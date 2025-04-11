@@ -149,7 +149,7 @@ const Integration = () => {
             method: selectedMethod,
             url,
             headers,
-            body,
+            body: JSON.parse(body),
             expectations: expectations.map((e) => ({
               key: e.key,
               operator: e.expected,
@@ -187,7 +187,7 @@ const Integration = () => {
 
   return (
     <ContainerMid>
-      {error && <Toast message={error} position={'top-right'} />}
+      {error && <Toast message={error} position={"top-right"} />}
       {!isLoading && !addTest && (
         <AddButtonContainer>
           <ComponentButton

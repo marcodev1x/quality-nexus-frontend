@@ -8,7 +8,7 @@ export interface TestsList {
     headers: {
       [key: string]: string;
     };
-    body: string;
+    body: any;
     expectations: {
       key: string;
       passed?: {
