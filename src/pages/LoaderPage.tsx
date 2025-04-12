@@ -110,7 +110,6 @@ const FormSection = styled.div`
   border: 1px solid #e2e8f0;
 `;
 
-
 const LoaderPage = () => {
   const arrayOptions = ["GET", "POST", "PUT", "DELETE", "PATCH"];
   const [selectedMethod, setSelectedMethod] = React.useState(arrayOptions[0]);
@@ -187,7 +186,7 @@ const LoaderPage = () => {
             method: selectedMethod,
             url,
             headers,
-            body: JSON.parse(body),
+            body: body ? JSON.parse(body) : "N/A",
             workersthreads: Number(workers),
             usersQt: Number(connections),
             time: Number(duration),

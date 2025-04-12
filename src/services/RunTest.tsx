@@ -9,11 +9,18 @@ import EnvsVars from "./EnvsVars";
 import GetToken from "./GetToken";
 import styled from "styled-components";
 import { FiCheckCircle, FiXCircle, FiAlertCircle } from "react-icons/fi";
-
+import { BarChart, Gauge, LineChart, PieChart } from "@mui/x-charts";
+import { RadarChart } from "recharts";
+import { Box } from "@mui/material";
 // Styled Components
 const ResultContent = styled.div`
   text-align: start;
   width: 100%;
+`;
+
+const DivisionLine = styled.hr`
+  border: 1px solid #e6e8eb;
+  margin: 20px 0;
 `;
 
 const ResultTitle = styled.h2`
@@ -54,13 +61,15 @@ const ResultValue = styled.span`
   white-space: pre;
 `;
 
-const ResultValueLoad = styled.span`
+const ResultValueGraph = styled.span`
   padding: 8px 12px;
+  border-radius: 6px;
   background: #f7f9fc;
   font-family: monospace;
   word-break: break-all;
-  max-height: 200px;
+  max-height: 300px;
   overflow-y: auto;
+  border: 1px solid #e6e8eb;
 `;
 
 const StatusBadge = styled.span<{ passed: boolean }>`
@@ -404,29 +413,142 @@ const RunTest = ({
         <ResultContent>
           <ResultTitle>Resultado do teste</ResultTitle>
           <ResultItem>
-            <ResultLabel>Registros de status:</ResultLabel>
-            <ResultValueLoad>Status 1xx: {runLoadTest["1xx"]}</ResultValueLoad>
-            <ResultValueLoad>Status 1xx: {runLoadTest["2xx"]}</ResultValueLoad>
-            <ResultValueLoad>Status 1xx: {runLoadTest["3xx"]}</ResultValueLoad>
-            <ResultValueLoad>Status 1xx: {runLoadTest["4xx"]}</ResultValueLoad>
-            <ResultValueLoad>Status 1xx: {runLoadTest["5xx"]}</ResultValueLoad>
+            <ResultLabel>Informações básicas essenciais:</ResultLabel>
+            <ResultValueGraph>
+              <p>
+                <b>Total de requisições:</b> {runLoadTest.requests.total}
+              </p>
+              <p>
+                <b>Duração de teste:</b> {runLoadTest.duration}s
+              </p>
+              <DivisionLine />
+              <p>
+                <b>Status 1xx</b> : {runLoadTest["1xx"]}x
+              </p>
+              <p>
+                <b> Status 2xx</b>: {runLoadTest["2xx"]}x
+              </p>
+              <p>
+                <b> Status 3xx</b>: {runLoadTest["3xx"]}x
+              </p>
+              <p>
+                <b> Status 4xx</b>: {runLoadTest["4xx"]}x
+              </p>
+              <p>
+                <b>Status 5xx</b>: {runLoadTest["5xx"]}x
+              </p>
+              <DivisionLine />
+              <p>
+                <b>Throughput médio</b>:{" "}
+                {runLoadTest.throughput.average.toFixed(0)} KB/s
+              </p>
+            </ResultValueGraph>
           </ResultItem>
 
           <ResultItem>
-            <ResultLabel>Corpo da resposta:</ResultLabel>
+            <ResultLabel>Dados de efetividade:</ResultLabel>
+            <ResultValueGraph>
+              <PieChart
+                series={[
+                  {
+                    data: [
+                      {
+                        id: 0,
+                        value: runLoadTest["2xx"],
+                        label: "Sucessos",
+                        color: "#2ecc71",
+                      },
+                      {
+                        id: 1,
+                        value: runLoadTest.errors,
+                        label: "Erros",
+                        color: "#e53e3e",
+                      },
+                      {
+                        id: 2,
+                        value: runLoadTest.timeouts,
+                        label: "Timeouts",
+                        color: "#f39c12",
+                      },
+                      {
+                        id: 3,
+                        value: runLoadTest["non2xx"],
+                        label: "Não 2xx",
+                        color: "#ccc",
+                      },
+                    ],
+                  },
+                ]}
+                width={900}
+                height={300}
+              />
+            </ResultValueGraph>
+          </ResultItem>
+
+          <ResultItem>
+            <ResultLabel>Tempos de resposta (em milisegundos):</ResultLabel>
+            <ResultValueGraph style={{ height: "800px" }}>
+              <LineChart
+                xAxis={[
+                  {
+                    data: [
+                      "Min. latência",
+                      "50% demoraram",
+                      "75% demoraram",
+                      "90% demoraram",
+                      "99% demoraram",
+                      "Máx." + " latência",
+                    ],
+                    scaleType: "band",
+                  },
+                ]}
+                series={[
+                  {
+                    data: [
+                      runLoadTest.latency.min,
+                      runLoadTest.latency.p50,
+                      runLoadTest.latency.p75,
+                      runLoadTest.latency.p90,
+                      runLoadTest.latency.p99,
+                      runLoadTest.latency.max,
+                    ],
+                    color: "#2ecc71",
+                  },
+                ]}
+                width={900}
+                height={300}
+              />
+            </ResultValueGraph>
+          </ResultItem>
+
+          <ResultItem>
+            <ResultLabel>Requisições por segundo:</ResultLabel>
+            <BarChart
+              xAxis={[
+                {
+                  scaleType: "band",
+                  data: ["Média/s", "Máx/s", "Mín/s", "Desvio"],
+                },
+              ]}
+              series={[
+                {
+                  data: [
+                    runLoadTest.requests.average,
+                    runLoadTest.requests.max,
+                    runLoadTest.requests.min,
+                    runLoadTest.requests.stddev,
+                  ],
+                  color: "#2ecc71",
+                },
+              ]}
+              width={900}
+              height={300}
+            />
+          </ResultItem>
+
+          <ResultItem>
+            <ResultLabel>Dados brutos do teste:</ResultLabel>
             <ResultValue>{returnLoadResponse()}</ResultValue>
-          </ResultItem>
-
-          <ResultItem>
-            <ResultLabel>
-              <ResultValue>{runLoadTest["1xx"]}</ResultValue>
-              Resultado:
-            </ResultLabel>
-          </ResultItem>
-
-          <ResultItem>
-            <ResultLabel>Valor(es) esperado(s):</ResultLabel>
-            <ExpectationsList>{returnExpectationsMapping()}</ExpectationsList>
           </ResultItem>
         </ResultContent>
       </>
