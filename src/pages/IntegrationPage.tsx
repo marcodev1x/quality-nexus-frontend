@@ -38,7 +38,7 @@ const StyledForm = styled.form`
   background: #ffffff;
   padding: 32px;
   border-radius: 16px;
-  box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
   max-width: 900px;
   min-height: 400px;
   width: 100%;

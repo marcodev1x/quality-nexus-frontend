@@ -9,10 +9,9 @@ import EnvsVars from "./EnvsVars";
 import GetToken from "./GetToken";
 import styled from "styled-components";
 import { FiCheckCircle, FiXCircle, FiAlertCircle } from "react-icons/fi";
-import { BarChart, Gauge, LineChart, PieChart } from "@mui/x-charts";
-import { RadarChart } from "recharts";
-import { Box } from "@mui/material";
-// Styled Components
+import { BarChart, LineChart, PieChart } from "@mui/x-charts";
+
+
 const ResultContent = styled.div`
   text-align: start;
   width: 100%;
