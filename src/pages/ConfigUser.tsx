@@ -101,6 +101,7 @@ const ConfigUser = () => {
               type="text"
               value={nome}
               onChange={(e) => setNome(e.target.value)}
+              disabled={!isEditing}
             />
             <Input
               style={{ width: "420px" }}
@@ -110,6 +111,7 @@ const ConfigUser = () => {
               type="text"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              disabled={!isEditing}
             />
             {isEditing && (
               <>

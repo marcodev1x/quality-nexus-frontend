@@ -131,12 +131,25 @@ const Integration = () => {
     e.preventDefault();
     setIsLoading(true);
     setSuccess(null);
-    setError(null);
 
     if (!url || !selectedMethod) {
       setError("Preencha todos os campos");
       setIsLoading(false);
       return;
+    }
+
+    let parsedBody: any = "N/A";
+
+    if (body) {
+      try {
+        parsedBody = JSON.parse(body);
+      } catch (parseError) {
+        // Se o parse falhar, define um erro e interrompe
+        console.error("Erro ao fazer parse do JSON:", parseError);
+        setError("Formato JSON inválido no corpo da requisição.");
+        setIsLoading(false);
+        return; // Interrompe a execução da função
+      }
     }
 
     try {
@@ -149,7 +162,7 @@ const Integration = () => {
             method: selectedMethod,
             url,
             headers,
-            body: JSON.parse(body),
+            body: parsedBody,
             expectations: expectations.map((e) => ({
               key: e.key,
               operator: e.expected,
@@ -184,6 +197,12 @@ const Integration = () => {
       setIsLoading(false);
     }
   };
+
+  setTimeout(() => {
+    if (error) {
+      setError(null);
+    }
+  }, 3500);
 
   return (
     <ContainerMid>

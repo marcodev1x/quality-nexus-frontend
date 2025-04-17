@@ -9,6 +9,7 @@ import {
 } from "react-icons/fi";
 import { NavLink, useNavigate } from "react-router";
 import useUser from "../hooks/useUser";
+
 const StyledMenu = styled.nav`
   display: flex;
   flex-direction: column;
@@ -74,6 +75,7 @@ const StyledMenu = styled.nav`
       color: #c0392b;
     }
   }
+
   .plan {
     padding: 0.32rem 1.5rem;
     border-radius: 16px;
@@ -83,7 +85,7 @@ const StyledMenu = styled.nav`
 
     width: fit-content;
 
-    margin: 12px auto 24px 60px;
+    margin: 12px auto 24px 40px;
   }
 `;
 
