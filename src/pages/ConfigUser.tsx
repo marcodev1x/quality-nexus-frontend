@@ -64,7 +64,7 @@ const ConfigUser = () => {
           email: user?.email,
           senha: senha || undefined,
           nome: nome,
-          newEmail: email || user?.email,
+          newEmail: email === user?.email ? undefined : email,
         },
         { headers: { Authorization: `Bearer ${GetToken()}` } },
       );
@@ -76,7 +76,9 @@ const ConfigUser = () => {
       return response.data;
     } catch (err) {
       console.error(err);
-      setError("Erro ao atualizar usuário");
+      setError(
+        "Erro ao atualizar usuário. Email já cadastrado ou dados inválidos.",
+      );
     } finally {
       setIsLoading(false);
       setIsEditing(false);
