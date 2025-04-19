@@ -1,8 +1,13 @@
 import useUser from "../hooks/useUser.ts";
 import FirstTopContainer from "../components/FirstTopContainer.tsx";
 import ComponentButton from "../components/Button.tsx";
+import axios from "axios";
+import EnvsVars from "../services/EnvsVars.ts";
+import React from "react";
 
 const PlanUser = () => {
+  const [buy, setBuy] = React.useState<string>("");
+
   const user = useUser();
   const returnNamedPlan = () => {
     if (user?.role === "free")
@@ -11,6 +16,23 @@ const PlanUser = () => {
     if (user?.role === "plan") return "Pago";
     else return "Unknown User";
   };
+
+  const retriveBuyURL = async () => {
+    if (user?.role === "plan") return;
+
+    const data = await axios.post(
+      `${EnvsVars.API_URL}/payments/checkout-session`,
+      {
+        email: user?.email,
+      },
+    );
+    setBuy(data.data.url);
+  };
+
+  React.useEffect(() => {
+    retriveBuyURL();
+  }, []);
+
   return (
     <FirstTopContainer>
       <div
@@ -31,7 +53,9 @@ const PlanUser = () => {
                 Você está no plano gratuito, considere fazer um upgrade para o
                 plano premium
               </h3>
-              <ComponentButton label={"Comprar"} />
+              <a href={buy} target={"_blank"}>
+                <ComponentButton label={"Comprar"}></ComponentButton>
+              </a>
             </div>
           )}
           {returnNamedPlan() === "Pago" && (
