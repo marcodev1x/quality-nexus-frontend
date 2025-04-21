@@ -6,6 +6,7 @@ import {
   FiLogOut,
   FiPercent,
   FiSettings,
+  FiClock,
 } from "react-icons/fi";
 import { NavLink, useNavigate } from "react-router";
 import useUser from "../hooks/useUser";
@@ -155,12 +156,38 @@ const LateralMenu = () => {
           </li>
         </NavLink>
         <NavLink
-          to="/configuracoes/user"
+          to={"/interno/testes-anteriores"}
           style={{ textDecoration: "none" }}
-          className={location.pathname === "/configuracoes" ? "active" : ""}
+          className={
+            location.pathname === "/interno/testes-anteriores" ? "active" : ""
+          }
         >
           <li
-            className={location.pathname === "/configuracoes" ? "active" : ""}
+            className={
+              location.pathname === "/interno/testes-anteriores" ? "active" : ""
+            }
+          >
+            <FiClock />
+            Histórico de testes
+          </li>
+        </NavLink>
+        <NavLink
+          to="/configuracoes/user"
+          style={{ textDecoration: "none" }}
+          className={
+            location.pathname === "/configuracoes/user" ||
+            location.pathname === "/configuracoes/plan"
+              ? "active"
+              : ""
+          }
+        >
+          <li
+            className={
+              location.pathname === "/configuracoes/user" ||
+              location.pathname === "/configuracoes/plan"
+                ? "active"
+                : ""
+            }
           >
             <FiSettings />
             Configurações

@@ -10,7 +10,7 @@ import Toast from "../helpers/Toast";
 import ToastSuccess from "../helpers/ToastSuccess";
 import ModalRun from "./ModalRun.tsx";
 import EnvsVars from "../services/EnvsVars";
-import {useLocation} from "react-router";
+import { useLocation } from "react-router";
 
 const TableContainer = styled.div`
   width: 100%;
@@ -89,7 +89,7 @@ const EmptyCell = styled(TableCell)`
   font-style: italic;
 `;
 
-const MethodBadge = styled.span<{ method: string }>`
+export const MethodBadge = styled.span<{ method: string }>`
   display: inline-block;
   padding: 4px 12px;
   border-radius: 30px;
@@ -236,14 +236,19 @@ const RenderExistingTests = () => {
     headerMemo,
   );
 
-    React.useEffect(() => {
+  React.useEffect(() => {
     if (userTests) {
-      const filteringTypesIntegration = userTests.filter(test => test.type === 'integration');
-      const filteringTypesLoad = userTests.filter(test => test.type === 'load');
-      console.log(tests)
+      const filteringTypesIntegration = userTests.filter(
+        (test) => test.type === "integration",
+      );
+      const filteringTypesLoad = userTests.filter(
+        (test) => test.type === "load",
+      );
+      console.log(tests);
 
-      if(location.pathname === '/interno/integration') setTests(filteringTypesIntegration);
-      if(location.pathname === '/interno/load') setTests(filteringTypesLoad);
+      if (location.pathname === "/interno/integration")
+        setTests(filteringTypesIntegration);
+      if (location.pathname === "/interno/load") setTests(filteringTypesLoad);
     }
   }, [userTests, location]);
 
@@ -252,7 +257,9 @@ const RenderExistingTests = () => {
   }
 
   if (error) {
-    return <Toast position={"top-right"} message="Erro ao carregar os testes" />;
+    return (
+      <Toast position={"top-right"} message="Erro ao carregar os testes" />
+    );
   }
 
   const renderExpectations = (

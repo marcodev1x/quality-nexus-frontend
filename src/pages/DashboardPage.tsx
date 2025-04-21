@@ -11,7 +11,7 @@ const CardsContainer = styled.div`
   width: 100%;
 
   padding: 20px;
-    margin-left: 80px;
+  margin-left: 80px;
   transition: margin-left 0.3s ease-in-out;
 
   @media (max-width: 768px) {
@@ -46,10 +46,10 @@ const DashboardPage = () => {
             }
           />
           <CardAtalho
-            title="Testes de carregamento"
+            title="Testes de carga"
             to="/interno/load"
             icon={<FiLoader />}
-            description="Realize testes de carregamento rapidamente."
+            description="Realize testes de carga rapidamente."
             button={
               <ComponentButton
                 label="Acessar"

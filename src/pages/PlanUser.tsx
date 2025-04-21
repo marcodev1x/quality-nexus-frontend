@@ -62,7 +62,7 @@ const PlanUser = () => {
             <div>
               <h3 style={{ fontWeight: "normal", color: "#232" }}>
                 Você está no plano premium, aproveite seus benefícios e comece a
-                testar!
+                testar. Obrigado por utilizar o Quality Nexus!
               </h3>
             </div>
           )}

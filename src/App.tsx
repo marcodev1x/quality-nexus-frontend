@@ -12,6 +12,7 @@ import ProtectedPage from "./pages/ProtectedPage";
 import EnvsVars from "./services/EnvsVars";
 import ConfigUser from "./pages/ConfigUser";
 import PlanUser from "./pages/PlanUser.tsx";
+import { HistoryTestsPage } from "./pages/HistoryTestsPage.tsx";
 
 function App() {
   console.log(EnvsVars);
@@ -26,14 +27,15 @@ function App() {
             <Route path="/home" element={<DashboardPage />} />
             <Route path="/configuracoes" element={<ConfigurationPage />}>
               <Route path="/configuracoes/user" element={<ConfigUser />} />
-              <Route
-                path="/configuracoes/plan"
-                element={<PlanUser/>}
-              />
+              <Route path="/configuracoes/plan" element={<PlanUser />} />
             </Route>
             <Route path="/interno/integration" element={<Integration />} />
             <Route path="/interno/performance" element={<Performance />} />
             <Route path="/interno/load" element={<LoaderPage />} />
+            <Route
+              path="/interno/testes-anteriores"
+              element={<HistoryTestsPage />}
+            />
           </Route>
         </Routes>
       </BrowserRouter>

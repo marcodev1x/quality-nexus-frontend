@@ -23,6 +23,7 @@ import {
   FiCode,
   FiCheckCircle,
 } from "react-icons/fi";
+import useUser from "../hooks/useUser.ts";
 
 const IntegrationContainer = styled.div`
   display: flex;
@@ -127,6 +128,8 @@ const Integration = () => {
     { key: string; expected: string; value: string }[]
   >([]);
 
+  const user = useUser();
+
   const sendForm = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
@@ -157,6 +160,7 @@ const Integration = () => {
         `${EnvsVars.API_URL}/tests/create`,
         {
           type: "integration",
+          userId: Number(user?.email),
           description: description,
           config: {
             method: selectedMethod,
