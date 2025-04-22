@@ -34,6 +34,7 @@ const TableColumn = styled.div<{ status: string }>`
   margin-top: 24px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   background: rgba(255, 255, 255, 0.15);
+  border: 1px solid #d8d8d8;
   display: flex;
   flex-direction: column;
   border-radius: 8px;
@@ -110,9 +111,10 @@ const RenderLogsTests = () => {
   };
 
   const LogsTestsFn = () => {
-    if (Array.isArray(data)) {
-      console.log(data.map((log) => log.config.method));
-      return data.map((log, idx) => (
+    let dataToFill: any = data;
+
+    if (Array.isArray(dataToFill)) {
+      return dataToFill.map((log, idx) => (
         <TableColumn key={idx} status={log.status}>
           <TitleEvent>
             {log.description}
@@ -127,12 +129,12 @@ const RenderLogsTests = () => {
             <SubTitles>Status:</SubTitles>
             {log.status === "completed" ? (
               <StatusBar>
-                <StatusText>Completo</StatusText>
+                <StatusText>completo</StatusText>
                 <FiCheckCircle color={"#2ecc71"} />
               </StatusBar>
             ) : (
               <StatusBar>
-                <StatusText>Falha</StatusText>
+                <StatusText>falha</StatusText>
                 <FiX color={"#e74c3c"} />
               </StatusBar>
             )}
