@@ -1,3 +1,5 @@
+export type TestLogs
+
 export type TestRunResponse = {
   id: number;
   testId: number;

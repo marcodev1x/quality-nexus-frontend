@@ -9,13 +9,11 @@ import Integration from "./pages/IntegrationPage";
 import Performance from "./pages/PerformancePage";
 import LoaderPage from "./pages/LoaderPage";
 import ProtectedPage from "./pages/ProtectedPage";
-import EnvsVars from "./services/EnvsVars";
 import ConfigUser from "./pages/ConfigUser";
 import PlanUser from "./pages/PlanUser.tsx";
 import { HistoryTestsPage } from "./pages/HistoryTestsPage.tsx";
 
 function App() {
-  console.log(EnvsVars);
   return (
     <>
       <GlobalStyle />

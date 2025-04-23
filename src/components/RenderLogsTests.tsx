@@ -32,6 +32,7 @@ const TableContainer = styled.div`
 const TableColumn = styled.div<{ status: string }>`
   padding: 24px;
   margin-top: 24px;
+  cursor: pointer;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   background: rgba(255, 255, 255, 0.15);
   border: 1px solid #d8d8d8;
@@ -144,7 +145,7 @@ const RenderLogsTests = () => {
       ));
     }
 
-    return <p>dqokqwodk</p>;
+    return;
   };
 
   const TotalTests = () => {
