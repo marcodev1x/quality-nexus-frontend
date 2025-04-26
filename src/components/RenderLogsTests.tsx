@@ -12,7 +12,6 @@ import { MethodBadge } from "./RenderExistingTests.tsx";
 import { TestsList } from "../Interfaces/TestsList.tsx";
 
 const TableContainer = styled.div`
-  width: 100%;
   margin: 24px 0 0 0;
   overflow-x: auto;
   gap: 2rem;

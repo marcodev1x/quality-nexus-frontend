@@ -18,7 +18,7 @@ const StyledMenu = styled.nav`
   left: 0;
   top: 0;
   width: 250px;
-  height: 100vh;
+  height: 90vh;
   background: #fff;
   padding: 2rem;
 
@@ -126,7 +126,7 @@ const LateralMenu = () => {
         >
           <li className={location.pathname === "/home" ? "active" : ""}>
             <FiHome />
-            Dashboard
+            Início
           </li>
         </NavLink>
         <NavLink
