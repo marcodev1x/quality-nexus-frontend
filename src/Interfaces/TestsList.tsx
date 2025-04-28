@@ -22,4 +22,5 @@ export interface TestsList {
     usersQt?: number;
     time?: number;
   };
+  results?: any;
 }

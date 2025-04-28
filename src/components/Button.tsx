@@ -9,7 +9,6 @@ interface ButtonProps extends React.ComponentProps<"button"> {
   label?: string;
   variant?: ButtonVariant;
   size?: ButtonSize;
-  onClick?: () => void;
   disabled?: boolean;
   loading?: boolean;
   icon?: React.ReactNode;
@@ -80,16 +79,16 @@ const Button = styled.button<ButtonProps>`
 `;
 
 const ComponentButton: React.FC<ButtonProps> = ({
-                                                  label,
-                                                  variant = "primary",
-                                                  size = "medium",
-                                                  onClick,
-                                                  disabled = false,
-                                                  loading = false,
-                                                  icon,
-                                                  type = "button",
-                                                  ...props
-                                                }) => {
+  label,
+  variant = "primary",
+  size = "medium",
+  onClick,
+  disabled = false,
+  loading = false,
+  icon,
+  type = "button",
+  ...props
+}) => {
   const classNames = [
     size,
     variant,
@@ -98,17 +97,17 @@ const ComponentButton: React.FC<ButtonProps> = ({
   ].join(" ");
 
   return (
-      <Button
-          type={type}
-          className={classNames}
-          onClick={!disabled && !loading ? onClick : undefined}
-          disabled={disabled || loading}
-          {...props}
-      >
-        {loading && <FiLoader className="animate-spin" />}
-        {icon}
-        {label}
-      </Button>
+    <Button
+      type={type}
+      className={classNames}
+      onClick={!disabled && !loading ? onClick : undefined}
+      disabled={disabled || loading}
+      {...props}
+    >
+      {loading && <FiLoader className="animate-spin" />}
+      {icon}
+      {label}
+    </Button>
   );
 };
 

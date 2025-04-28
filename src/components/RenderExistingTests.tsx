@@ -11,6 +11,7 @@ import ToastSuccess from "../helpers/ToastSuccess";
 import ModalRun from "./ModalRun.tsx";
 import EnvsVars from "../services/EnvsVars";
 import { useLocation } from "react-router";
+import { TitleSedwick } from "./RenderLogsTests.tsx";
 
 const TableContainer = styled.div`
   width: 100%;
@@ -96,22 +97,8 @@ export const MethodBadge = styled.span<{ method: string }>`
   font-size: 12px;
   font-weight: 600;
   letter-spacing: 0.5px;
-  background: ${(props) => {
-    switch (props.method) {
-      case "GET":
-        return "rgba(46, 204, 113, 0.15)";
-      case "POST":
-        return "rgba(52, 152, 219, 0.15)";
-      case "PUT":
-        return "rgba(243, 156, 18, 0.15)";
-      case "DELETE":
-        return "rgba(231, 76, 60, 0.15)";
-      case "PATCH":
-        return "rgba(155, 89, 182, 0.15)";
-      default:
-        return "rgba(149, 165, 166, 0.15)";
-    }
-  }};
+  width: fit-content;
+
   color: ${(props) => {
     switch (props.method) {
       case "GET":
@@ -128,21 +115,6 @@ export const MethodBadge = styled.span<{ method: string }>`
         return "#7f8c8d";
     }
   }};
-`;
-
-const ExpectationsText = styled.div`
-  max-width: 300px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  color: #555;
-  font-size: 13px;
-  padding-right: 10px;
-
-  &:hover {
-    white-space: normal;
-    word-break: break-word;
-  }
 `;
 
 const UrlText = styled.div`
@@ -262,18 +234,6 @@ const RenderExistingTests = () => {
     );
   }
 
-  const renderExpectations = (
-    expectations: TestsList["config"]["expectations"],
-  ) => {
-    if (!expectations || !Array.isArray(expectations)) return "N/A";
-
-    return expectations
-      .map((expectation) => {
-        return `Chave API: ${expectation.key} - Operador: ${expectation.operator} - Esperado: ${expectation.value}`;
-      })
-      .join(", ");
-  };
-
   const handleDeleteTest = async (id: number) => {
     setDeleteTestLoading(true);
     setDeleteTestError(false);
@@ -319,70 +279,71 @@ const RenderExistingTests = () => {
   };
 
   return (
-    <TableContainer>
-      {deleteTest && <ToastSuccess message="Teste excluído com sucesso" />}
-      <StyledTable>
-        <TableHeader>
-          <tr>
-            <TableHeaderCell>Descrição</TableHeaderCell>
-            <TableHeaderCell>Método</TableHeaderCell>
-            <TableHeaderCell>URL</TableHeaderCell>
-            <TableHeaderCell>Expectativas</TableHeaderCell>
-            <TableHeaderCell>Ações</TableHeaderCell>
-          </tr>
-        </TableHeader>
-        <tbody>
-          {tests.length > 0 ? (
-            tests.map((test, id) => (
-              <TableRow key={id} onClick={() => handleModalOpenning(test)}>
-                <TableCell>
-                  <Description>{test.description}</Description>
-                </TableCell>
-                <TableCell>
-                  <MethodBadge method={test.config.method}>
-                    {test.config.method}
-                  </MethodBadge>
-                </TableCell>
-                <TableCell>
-                  <UrlText>{test.config.url}</UrlText>
-                </TableCell>
-                <TableCell>
-                  <ExpectationsText>
-                    {renderExpectations(test.config.expectations)}
-                  </ExpectationsText>
-                </TableCell>
-                <ActionsCell>
-                  <ActionButton
-                    onClick={(e) => {
-                      handleDeleteTest(test.id);
-                      e.stopPropagation();
-                    }}
-                  >
-                    <FiTrash size={16} />
-                  </ActionButton>
-                </ActionsCell>
-              </TableRow>
-            ))
-          ) : (
-            <EmptyRow>
-              <EmptyCell colSpan={6}>
-                <EmptyStateMessage>
-                  <FiInfo size={24} />
-                  <span>Nenhum teste cadastrado</span>
-                </EmptyStateMessage>
-              </EmptyCell>
-            </EmptyRow>
-          )}
-        </tbody>
-      </StyledTable>
-      {selectedTest && (
-        <ModalRun
-          testProps={selectedTest}
-          isOpen={isModalOpen}
-          onClose={handleCloseModal}
-        />
-      )}
-    </TableContainer>
+    <>
+      <TitleSedwick style={{ marginBottom: "2rem", marginTop: "3rem" }}>
+        Testes
+      </TitleSedwick>
+      <TableContainer>
+        {deleteTest && <ToastSuccess message="Teste excluído com sucesso" />}
+        <StyledTable>
+          <TableHeader>
+            <tr>
+              <TableHeaderCell>Descrição</TableHeaderCell>
+              <TableHeaderCell>Método</TableHeaderCell>
+              <TableHeaderCell>URL</TableHeaderCell>
+              <TableHeaderCell>Ações</TableHeaderCell>
+            </tr>
+          </TableHeader>
+          <tbody>
+            {tests.length > 0 ? (
+              tests.map((test, id) => (
+                <TableRow key={id} onClick={() => handleModalOpenning(test)}>
+                  <TableCell>
+                    <Description>{test.description}</Description>
+                  </TableCell>
+                  <TableCell>
+                    <MethodBadge method={test.config.method}>
+                      {test.config.method}
+                    </MethodBadge>
+                  </TableCell>
+                  <TableCell>
+                    <UrlText>{test.config.url}</UrlText>
+                  </TableCell>
+
+                  <ActionsCell>
+                    <ActionButton
+                      onClick={(e) => {
+                        handleDeleteTest(test.id);
+                        e.stopPropagation();
+                      }}
+                    >
+                      <FiTrash size={16} />
+                    </ActionButton>
+                  </ActionsCell>
+                </TableRow>
+              ))
+            ) : (
+              <EmptyRow>
+                <EmptyCell colSpan={6}>
+                  <EmptyStateMessage>
+                    <FiInfo size={24} />
+                    <span>Nenhum teste cadastrado</span>
+                  </EmptyStateMessage>
+                </EmptyCell>
+              </EmptyRow>
+            )}
+          </tbody>
+        </StyledTable>
+        {selectedTest && (
+          <ModalRun
+            alwaysHaveData={false}
+            testProps={selectedTest}
+            isOpen={isModalOpen}
+            onClose={handleCloseModal}
+          />
+        )}
+      </TableContainer>
+    </>
   );
 };
 

@@ -11,7 +11,6 @@ import styled from "styled-components";
 import { FiCheckCircle, FiXCircle, FiAlertCircle } from "react-icons/fi";
 import { BarChart, LineChart, PieChart } from "@mui/x-charts";
 
-
 const ResultContent = styled.div`
   text-align: start;
   width: 100%;
@@ -183,9 +182,11 @@ const LoaderWrapper = styled.div`
 const RunTest = ({
   test,
   onRunningChange,
+  alwaysHaveData = false,
 }: {
   test: TestsList;
   onRunningChange?: (running: boolean) => void;
+  alwaysHaveData?: boolean;
 }) => {
   const [runTest, setRunTest] = React.useState<TestRunResponse | null>(null);
   const [runLoadTest, setRunLoadTest] = React.useState<TestLoadResponse | null>(
@@ -196,38 +197,43 @@ const RunTest = ({
   const [isRunning, setIsRunning] = React.useState<boolean>(false);
 
   const handleRunTest = React.useCallback(async () => {
-    setIsLoading(true);
-    setIsRunning(true);
+    if (!alwaysHaveData) {
+      setIsLoading(true);
+      setIsRunning(true);
 
-    if (onRunningChange) {
-      onRunningChange(true);
-    }
-
-    if (test.type === "integration") {
-      try {
-        const response = await axios.post(
-          `${EnvsVars.API_URL}/tests/run-tests`,
-          {
-            id: test.id,
-            description: test.description,
-            type: test.type,
-            config: test.config,
-          },
-          {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${GetToken()}`,
-            },
-          },
-        );
-        setRunTest(response.data);
-      } catch (err) {
-        setError(err as string);
-        console.error(err);
-      } finally {
-        setIsRunning(false);
-        setIsLoading(false);
+      if (onRunningChange) {
+        onRunningChange(true);
       }
+
+      if (test.type === "integration") {
+        try {
+          const response = await axios.post(
+            `${EnvsVars.API_URL}/tests/run-tests`,
+            {
+              id: test.id,
+              description: test.description,
+              type: test.type,
+              config: test.config,
+            },
+            {
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${GetToken()}`,
+              },
+            },
+          );
+          setRunTest(response.data);
+        } catch (err) {
+          setError(err as string);
+          console.error(err);
+        } finally {
+          setIsRunning(false);
+          setIsLoading(false);
+        }
+      }
+    } else {
+      setIsRunning(true);
+      setRunTest(test.results);
     }
 
     if (test.type === "load") {
@@ -395,13 +401,24 @@ const RunTest = ({
             </ResultItem>
           </ResultContent>
         )}
-        <ComponentButton
-          onClick={handleRunTest}
-          label={isRunning ? "Executando..." : "Rodar teste novamente"}
-          size={"medium"}
-          variant={"primary"}
-          disabled={isRunning}
-        />
+        {!alwaysHaveData && (
+          <ComponentButton
+            onClick={handleRunTest}
+            label={isRunning ? "Executando..." : "Rodar teste novamente"}
+            size={"medium"}
+            variant={"primary"}
+            disabled={isRunning}
+          />
+        )}
+        {alwaysHaveData && (
+          <ComponentButton
+            onClick={handleRunTest}
+            label={isRunning ? "Executando..." : "Rodar teste novamente"}
+            size={"medium"}
+            variant={"primary"}
+            disabled={isRunning}
+          />
+        )}
       </>
     );
   }

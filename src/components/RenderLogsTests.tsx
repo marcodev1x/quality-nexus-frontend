@@ -5,11 +5,13 @@ import { AxiosHeaders } from "axios";
 import GetToken from "../services/GetToken.tsx";
 import styled from "styled-components";
 import ContainerMid from "./ContainerMid.tsx";
-import { format } from "date-fns";
+import { addHours, format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { FiCheckCircle, FiX } from "react-icons/fi";
 import { MethodBadge } from "./RenderExistingTests.tsx";
 import { TestsList } from "../Interfaces/TestsList.tsx";
+import ComponentButton from "./Button.tsx";
+import ModalRun from "./ModalRun.tsx";
 
 const TableContainer = styled.div`
   margin: 24px 0 0 0;
@@ -39,10 +41,10 @@ const TableColumn = styled.div<{ status: string }>`
   flex-direction: column;
   border-radius: 8px;
   gap: 1rem;
-  width: 200px;
+  width: 400px;
 `;
 
-const Title = styled.h1`
+export const TitleSedwick = styled.h1`
   font-size: 32px;
   font-weight: 600;
   font-family: "Sedgwick Ave Display";
@@ -53,7 +55,7 @@ const Title = styled.h1`
 const TitleEvent = styled.h1`
   display: flex;
   gap: 8px;
-  font-size: 18px;
+  font-size: 14px;
   color: #333333;
   font-weight: 600;
 `;
@@ -85,10 +87,20 @@ const Badge = styled.span`
   border-radius: 50px;
   font-size: 13px;
   font-weight: 500;
-  margin-left: 8px;
+`;
+
+const TitleContainer = styled.div`
+  display: flex;
+  gap: 1rem;
+  height: fit-content;
 `;
 
 const RenderLogsTests = () => {
+  const [isModalOpen, setIsModalOpen] = React.useState<boolean>(false);
+  const [selectedTest, setSelectedTest] = React.useState<null | TestsList>(
+    null,
+  );
+
   const headerMemo = React.useMemo(() => {
     return new AxiosHeaders({
       "Content-Type": "application/json",
@@ -103,6 +115,20 @@ const RenderLogsTests = () => {
     headerMemo,
   );
 
+  const handleModalOpenning = (test: any) => {
+    const testData = {
+      ...test,
+      results: test.results || null,
+    };
+    setSelectedTest(testData);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setSelectedTest(null);
+    setIsModalOpen(false);
+  };
+
   const validateTypeTest = (type: TestsList["type"]) => {
     if (type === "integration") return "Integração";
     if (type === "load") return "Carga";
@@ -116,15 +142,15 @@ const RenderLogsTests = () => {
     if (Array.isArray(dataToFill)) {
       return dataToFill.map((log, idx) => (
         <TableColumn key={idx} status={log.status}>
-          <TitleEvent>
-            {log.description}
+          <TitleContainer>
+            <TitleEvent>{log.description}</TitleEvent>
             <MethodBadge method={log.config.method}>
               {log.config.method}
             </MethodBadge>
             <SubTitles>
               <Badge>{validateTypeTest(log.type)}</Badge>
             </SubTitles>
-          </TitleEvent>
+          </TitleContainer>
           <div style={{ display: "flex", gap: "10px" }}>
             <SubTitles>Status:</SubTitles>
             {log.status === "completed" ? (
@@ -140,6 +166,13 @@ const RenderLogsTests = () => {
             )}
           </div>
           <p>{formatData(log.createdAt)}</p>
+          <ComponentButton
+            onClick={(e) => {
+              e.stopPropagation(); // Evita que o evento se propague
+              handleModalOpenning(log);
+            }}
+            label="Ver logs"
+          />
         </TableColumn>
       ));
     }
@@ -149,12 +182,15 @@ const RenderLogsTests = () => {
 
   const TotalTests = () => {
     if (Array.isArray(data)) {
-      return <Title>Total de registros: {data.length}</Title>;
+      return <TitleSedwick>Total de registros: {data.length}</TitleSedwick>;
     }
   };
 
   const formatData = (data: Date) => {
-    return format(new Date(data), "dd/MM/yyyy HH:mm:ss", {
+    if (!data) return "Sem data definida";
+
+    const BrazilDate = addHours(data, -3); // Adiciona 3 horas para converter para o fuso horário do Brasil
+    return format(new Date(BrazilDate), "dd/MM/yyyy HH:mm:ss", {
       locale: ptBR,
     });
   };
@@ -168,6 +204,15 @@ const RenderLogsTests = () => {
         <TableContainer>
           <LogsTestsFn />
         </TableContainer>
+        {/* Modal renderizado uma única vez fora do loop */}
+        {isModalOpen && selectedTest && (
+          <ModalRun
+            isOpen={isModalOpen}
+            onClose={handleCloseModal}
+            testProps={selectedTest}
+            alwaysHaveData={true}
+          />
+        )}
       </ContainerMid>
     </>
   );

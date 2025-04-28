@@ -245,10 +245,12 @@ const ModalRun = ({
   testProps,
   isOpen,
   onClose,
+  alwaysHaveData = false,
 }: {
   testProps: TestsList;
   isOpen: boolean;
   onClose: () => void;
+  alwaysHaveData: boolean;
 }) => {
   const [test, setTest] = React.useState<TestsList | null>(null);
   const [isTestRunning, setIsTestRunning] = React.useState(false);
@@ -388,7 +390,11 @@ const ModalRun = ({
                 <ButtonContainer></ButtonContainer>
               </>
             )}
-            <RunTest test={test} onRunningChange={handleTestRunning} />
+            <RunTest
+              test={test}
+              onRunningChange={handleTestRunning}
+              alwaysHaveData={alwaysHaveData}
+            />
           </ModalContainer>
         </Background>
       </ContainerMid>
