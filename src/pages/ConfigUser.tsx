@@ -28,6 +28,7 @@ const Form = styled.form`
 
 const ConfigUser = () => {
   const user = useUser();
+  console.log(user);
 
   const [nome, setNome] = React.useState<string | undefined>(user?.nome);
   const [email, setEmail] = React.useState<string | undefined>(user?.email);
