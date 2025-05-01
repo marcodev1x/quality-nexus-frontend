@@ -264,7 +264,7 @@ const ModalRun = ({
   }, [testProps, isOpen]);
 
   const validateTypeTest = (type: TestsList["type"]) => {
-    if (type === "integration") return "Integração";
+    if (type === "integration") return "API";
     if (type === "load") return "Carga";
     if (type === "performance") return "Performance";
     return "N/A";

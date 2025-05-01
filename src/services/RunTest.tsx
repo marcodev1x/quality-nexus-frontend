@@ -197,6 +197,11 @@ const RunTest = ({
   const [isRunning, setIsRunning] = React.useState<boolean>(false);
 
   const handleRunTest = React.useCallback(async () => {
+    if (test.type === "integration" && alwaysHaveData) {
+      setRunTest(test.results);
+      return;
+    }
+
     if (!alwaysHaveData) {
       setIsLoading(true);
       setIsRunning(true);
@@ -231,9 +236,12 @@ const RunTest = ({
           setIsLoading(false);
         }
       }
-    } else {
-      setIsRunning(true);
-      setRunTest(test.results);
+    }
+
+    if (test.type === "load" && alwaysHaveData) {
+      setRunLoadTest(test.results);
+      console.log(test, test.results, runLoadTest);
+      return;
     }
 
     if (test.type === "load") {
@@ -277,6 +285,9 @@ const RunTest = ({
     );
 
   const returnResponse = () => {
+    if (test.results?.axiosData)
+      return JSON.stringify(test.results?.axiosData, null, 2);
+
     if (!runTest?.APIResponse) return;
 
     if (Array.isArray(runTest.APIResponse)) {
@@ -293,6 +304,23 @@ const RunTest = ({
   };
 
   const returnExpectationsMapping = () => {
+    if (test.results?.resolvedResults)
+      return test.results?.resolvedResults.map((r: any, index: any) => (
+        <ExpectationItem
+          key={index}
+          status={r.error || !r.passed ? "failed" : "passed"}
+        >
+          <ExpectationIcon>
+            {r.error || !r.passed ? (
+              <FiXCircle color="#e53e3e" />
+            ) : (
+              <FiCheckCircle color="#2ecc71" />
+            )}
+          </ExpectationIcon>
+          {`Chave API: ${r.key} - Operador: ${r.operator} - Valor esperado: ${r.value}\n -> Valor retornado: ${r.passed?.found ?? "N/A"}\n`}
+        </ExpectationItem>
+      ));
+
     if (!runTest?.expectations) return "N/A";
 
     if (runTest?.expectations.length > 0) {
@@ -343,7 +371,7 @@ const RunTest = ({
     return runTest.expectations.some((exp) => exp.error);
   };
 
-  if (runTest && test.type === "integration") {
+  if (runTest && test.type === "integration" && !alwaysHaveData) {
     return (
       <>
         {runTest && (
@@ -423,7 +451,235 @@ const RunTest = ({
     );
   }
 
-  if (runLoadTest && test.type === "load") {
+  if (runTest && test.type === "integration" && alwaysHaveData) {
+    return (
+      <>
+        {runTest && (
+          <ResultContent>
+            <ResultTitle>Resultado do teste</ResultTitle>
+            <ResultItem>
+              <ResultLabel>Status:</ResultLabel>
+              <ResultValue>{test.results?.axiosStatus}</ResultValue>
+            </ResultItem>
+
+            <ResultItem>
+              <ResultLabel>Corpo da resposta:</ResultLabel>
+              <ResultValue>{returnResponse()}</ResultValue>
+            </ResultItem>
+
+            <ResultItem>
+              <ResultLabel>
+                {runTest.passed ? (
+                  <FiCheckCircle color="#2ecc71" />
+                ) : (
+                  <FiXCircle color="#e53e3e" />
+                )}
+                Resultado:
+              </ResultLabel>
+              <ResultValue>
+                {runTest.passed ? "PASSOU" : "NÃO PASSOU"}
+                <StatusBadge passed={runTest.passed}>
+                  {runTest.passed ? "SUCESSO" : "FALHA"}
+                </StatusBadge>
+              </ResultValue>
+            </ResultItem>
+
+            {!runTest.passed && (
+              <ResultItem>
+                <ResultLabel>
+                  <FiAlertCircle color="#e53e3e" />
+                  Erros encontrados:
+                </ResultLabel>
+                {runTest.error ? (
+                  <ErrorValue>{runTest.error}</ErrorValue>
+                ) : hasExpectationErrors() ? (
+                  <ErrorsList>{findExpectationErrors()}</ErrorsList>
+                ) : (
+                  <NoErrorsBadge>
+                    <FiCheckCircle />
+                    Sem erros nas expectativas
+                  </NoErrorsBadge>
+                )}
+              </ResultItem>
+            )}
+
+            <ResultItem>
+              <ResultLabel>Valor(es) esperado(s):</ResultLabel>
+              <ExpectationsList>{returnExpectationsMapping()}</ExpectationsList>
+            </ResultItem>
+          </ResultContent>
+        )}
+        {!alwaysHaveData && (
+          <ComponentButton
+            onClick={handleRunTest}
+            label={isRunning ? "Executando..." : "Rodar teste novamente"}
+            size={"medium"}
+            variant={"primary"}
+            disabled={isRunning}
+          />
+        )}
+        {alwaysHaveData && (
+          <ComponentButton
+            onClick={handleRunTest}
+            label={isRunning ? "Executando..." : "Rodar teste novamente"}
+            size={"medium"}
+            variant={"primary"}
+            disabled={isRunning}
+          />
+        )}
+      </>
+    );
+  }
+
+  if (runLoadTest && test.type === "load" && !alwaysHaveData) {
+    return (
+      <>
+        <ResultContent>
+          <ResultTitle>Resultado do teste</ResultTitle>
+          <ResultItem>
+            <ResultLabel>Informações básicas essenciais:</ResultLabel>
+            <ResultValueGraph>
+              <p>
+                <b>Total de requisições:</b> {runLoadTest.requests.total}
+              </p>
+              <p>
+                <b>Duração de teste:</b> {runLoadTest.duration}s
+              </p>
+              <DivisionLine />
+              <p>
+                <b>Status 1xx</b> : {runLoadTest["1xx"]}x
+              </p>
+              <p>
+                <b> Status 2xx</b>: {runLoadTest["2xx"]}x
+              </p>
+              <p>
+                <b> Status 3xx</b>: {runLoadTest["3xx"]}x
+              </p>
+              <p>
+                <b> Status 4xx</b>: {runLoadTest["4xx"]}x
+              </p>
+              <p>
+                <b>Status 5xx</b>: {runLoadTest["5xx"]}x
+              </p>
+              <DivisionLine />
+              <p>
+                <b>Throughput médio</b>:{" "}
+                {runLoadTest.throughput.average.toFixed(0)} KB/s
+              </p>
+            </ResultValueGraph>
+          </ResultItem>
+
+          <ResultItem>
+            <ResultLabel>Dados de efetividade:</ResultLabel>
+            <ResultValueGraph>
+              <PieChart
+                series={[
+                  {
+                    data: [
+                      {
+                        id: 0,
+                        value: runLoadTest["2xx"],
+                        label: "Sucessos",
+                        color: "#2ecc71",
+                      },
+                      {
+                        id: 1,
+                        value: runLoadTest.errors,
+                        label: "Erros",
+                        color: "#e53e3e",
+                      },
+                      {
+                        id: 2,
+                        value: runLoadTest.timeouts,
+                        label: "Timeouts",
+                        color: "#f39c12",
+                      },
+                      {
+                        id: 3,
+                        value: runLoadTest["non2xx"],
+                        label: "Não 2xx",
+                        color: "#ccc",
+                      },
+                    ],
+                  },
+                ]}
+                width={900}
+                height={300}
+              />
+            </ResultValueGraph>
+          </ResultItem>
+
+          <ResultItem>
+            <ResultLabel>Tempos de resposta (em milisegundos):</ResultLabel>
+            <ResultValueGraph style={{ height: "800px" }}>
+              <LineChart
+                xAxis={[
+                  {
+                    data: [
+                      "Min. latência",
+                      "50% demoraram",
+                      "75% demoraram",
+                      "90% demoraram",
+                      "99% demoraram",
+                      "Máx." + " latência",
+                    ],
+                    scaleType: "band",
+                  },
+                ]}
+                series={[
+                  {
+                    data: [
+                      runLoadTest.latency.min,
+                      runLoadTest.latency.p50,
+                      runLoadTest.latency.p75,
+                      runLoadTest.latency.p90,
+                      runLoadTest.latency.p99,
+                      runLoadTest.latency.max,
+                    ],
+                    color: "#2ecc71",
+                  },
+                ]}
+                width={900}
+                height={300}
+              />
+            </ResultValueGraph>
+          </ResultItem>
+
+          <ResultItem>
+            <ResultLabel>Requisições por segundo:</ResultLabel>
+            <BarChart
+              xAxis={[
+                {
+                  scaleType: "band",
+                  data: ["Média/s", "Máx/s", "Mín/s", "Desvio"],
+                },
+              ]}
+              series={[
+                {
+                  data: [
+                    runLoadTest.requests.average,
+                    runLoadTest.requests.max,
+                    runLoadTest.requests.min,
+                    runLoadTest.requests.stddev,
+                  ],
+                  color: "#2ecc71",
+                },
+              ]}
+              width={900}
+              height={300}
+            />
+          </ResultItem>
+
+          <ResultItem>
+            <ResultLabel>Dados brutos do teste:</ResultLabel>
+            <ResultValue>{returnLoadResponse()}</ResultValue>
+          </ResultItem>
+        </ResultContent>
+      </>
+    );
+  }
+
+  if (runLoadTest && test.type === "load" && alwaysHaveData) {
     return (
       <>
         <ResultContent>
@@ -575,7 +831,13 @@ const RunTest = ({
     <>
       <ComponentButton
         onClick={handleRunTest}
-        label={isRunning ? "Executando..." : "Rodar teste"}
+        label={
+          isRunning
+            ? "Executando..."
+            : alwaysHaveData
+              ? "Ver registros anteriores"
+              : "Rodar teste"
+        }
         size={"medium"}
         variant={"primary"}
         disabled={isRunning}

@@ -130,7 +130,7 @@ const RenderLogsTests = () => {
   };
 
   const validateTypeTest = (type: TestsList["type"]) => {
-    if (type === "integration") return "Integração";
+    if (type === "integration") return "API";
     if (type === "load") return "Carga";
     if (type === "performance") return "Performance";
     return "N/A";
@@ -195,6 +195,8 @@ const RenderLogsTests = () => {
     });
   };
 
+  console.log(selectedTest);
+
   return (
     <>
       {isLoading && <div>Loading...</div>}
@@ -204,7 +206,6 @@ const RenderLogsTests = () => {
         <TableContainer>
           <LogsTestsFn />
         </TableContainer>
-        {/* Modal renderizado uma única vez fora do loop */}
         {isModalOpen && selectedTest && (
           <ModalRun
             isOpen={isModalOpen}

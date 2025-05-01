@@ -227,7 +227,7 @@ const Integration = () => {
       {!isLoading && addTest && (
         <StyledForm onSubmit={sendForm}>
           <FormHeader>
-            <FormTitle>Novo Teste de Integração</FormTitle>
+            <FormTitle>Novo Teste de API</FormTitle>
             <FormSubtitle>
               Configure os parâmetros do seu teste de API
             </FormSubtitle>

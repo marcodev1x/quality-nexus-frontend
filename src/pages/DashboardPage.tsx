@@ -33,10 +33,10 @@ const DashboardPage = () => {
       <CardsContainer>
         <div className="cards-container">
           <CardAtalho
-            title="Testes de integração"
+            title="Testes de API"
             to="/interno/integration"
             icon={<FiPercent />}
-            description="Realize testes de integração rapidamente."
+            description="Realize testes de API rapidamente."
             button={
               <ComponentButton
                 label="Acessar"

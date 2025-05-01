@@ -142,7 +142,7 @@ const LateralMenu = () => {
             }
           >
             <FiPercent />
-            Integração
+            API
           </li>
         </NavLink>
         <NavLink
