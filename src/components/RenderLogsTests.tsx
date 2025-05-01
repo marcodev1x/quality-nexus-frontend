@@ -46,10 +46,10 @@ const TableColumn = styled.div<{ status: string }>`
 
 export const TitleSedwick = styled.h1`
   font-size: 32px;
-  font-weight: 600;
-  font-family: "Sedgwick Ave Display";
+  font-weight: 800;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   word-spacing: 4px;
-  color: #2ecc71;
+  color: #433;
 `;
 
 const TitleEvent = styled.h1`
@@ -182,7 +182,7 @@ const RenderLogsTests = () => {
 
   const TotalTests = () => {
     if (Array.isArray(data)) {
-      return <TitleSedwick>Total de registros: {data.length}</TitleSedwick>;
+      return <TitleSedwick>Histórico de Testes</TitleSedwick>;
     }
   };
 
@@ -194,8 +194,6 @@ const RenderLogsTests = () => {
       locale: ptBR,
     });
   };
-
-  console.log(selectedTest);
 
   return (
     <>

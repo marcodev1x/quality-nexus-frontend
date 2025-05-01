@@ -281,7 +281,9 @@ const RenderExistingTests = () => {
   return (
     <>
       <TitleSedwick style={{ marginBottom: "2rem", marginTop: "3rem" }}>
-        Testes
+        {location.pathname === "/interno/integration"
+          ? "Testes de API"
+          : "Testes de carga"}
       </TitleSedwick>
       <TableContainer>
         {deleteTest && <ToastSuccess message="Teste excluído com sucesso" />}

@@ -459,12 +459,14 @@ const RunTest = ({
             <ResultTitle>Resultado do teste</ResultTitle>
             <ResultItem>
               <ResultLabel>Status:</ResultLabel>
-              <ResultValue>{test.results?.axiosStatus}</ResultValue>
+              <ResultValue>
+                {test.results?.axiosStatus || test.results?.error}
+              </ResultValue>
             </ResultItem>
 
             <ResultItem>
               <ResultLabel>Corpo da resposta:</ResultLabel>
-              <ResultValue>{returnResponse()}</ResultValue>
+              <ResultValue>{returnResponse() || "N/A"}</ResultValue>
             </ResultItem>
 
             <ResultItem>
@@ -508,24 +510,6 @@ const RunTest = ({
               <ExpectationsList>{returnExpectationsMapping()}</ExpectationsList>
             </ResultItem>
           </ResultContent>
-        )}
-        {!alwaysHaveData && (
-          <ComponentButton
-            onClick={handleRunTest}
-            label={isRunning ? "Executando..." : "Rodar teste novamente"}
-            size={"medium"}
-            variant={"primary"}
-            disabled={isRunning}
-          />
-        )}
-        {alwaysHaveData && (
-          <ComponentButton
-            onClick={handleRunTest}
-            label={isRunning ? "Executando..." : "Rodar teste novamente"}
-            size={"medium"}
-            variant={"primary"}
-            disabled={isRunning}
-          />
         )}
       </>
     );
