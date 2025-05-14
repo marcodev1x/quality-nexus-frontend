@@ -3,12 +3,12 @@ import styled from "styled-components";
 import Input from "../components/Input";
 import ComponentButton from "../components/Button";
 import { useLocalStorage } from "../hooks/useLocalStorage";
-import axios, { AxiosError } from "axios";
+import axios from "axios";
 import { NavLink, useNavigate } from "react-router";
 import Toast from "../helpers/Toast";
 import Loader from "../helpers/Loader";
 import EnvsVars from "../services/EnvsVars";
-import { FiChevronLeft } from "react-icons/fi";
+import { FiChevronLeft, FiEye, FiEyeOff } from "react-icons/fi";
 
 const RegisterContainer = styled.div`
   display: flex;
@@ -124,6 +124,7 @@ const RegisterPage = () => {
   const [, setValue] = useLocalStorage("token", "");
   const [isLoading, setIsLoading] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
+  const [seeingPassword, setSeeingPassword] = React.useState(false);
   const navigate = useNavigate();
 
   const sendForm = async (e: React.FormEvent) => {
@@ -133,12 +134,11 @@ const RegisterPage = () => {
 
     try {
       await axios.get(`${EnvsVars.API_URL}/user/${emailInput}`);
-      setError("Este e-mail já está cadastrado");
       setIsLoading(false);
+      setError('Email já cadastrado');
       return;
     } catch (err) {
       console.error(err);
-      setError("Email já cadastrado");
     } finally {
       setIsLoading(false);
     }
@@ -159,7 +159,14 @@ const RegisterPage = () => {
         return;
       }
 
-      const response = await axios.post("http://localhost:3000/user/register", {
+      const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\W).{8,}$/;
+
+      if (!passwordRegex.test(passwordInput)) {
+        setError("A senha deve ter pelo menos 8 caracteres, incluindo uma letra maiúscula, uma letra minúscula e um caractere especial.");
+        return;
+      }
+
+      const response = await axios.post(`${EnvsVars.API_URL}/user/register`, {
         nome: nameInput,
         email: emailInput,
         password: passwordInput,
@@ -169,17 +176,21 @@ const RegisterPage = () => {
         setValue(response.data.user.token);
         navigate("/home");
       }
-    } catch (err) {
-      console.error(err as AxiosError);
-      setError("Erro");
+    } catch (err: any) {
+      console.error(err);
+      setError(err.response?.data.message as string);
     } finally {
       setIsLoading(false);
     }
   };
 
+
+  const toggleSeeingPassword = () => {
+    setSeeingPassword(!seeingPassword);
+  };
+
   return (
     <RegisterContainer>
-      {error && <Toast message={error} position="top-center" />}
       <RegisterCard>
         <NavLink to={"/"}>
           <FiChevronLeft
@@ -209,14 +220,18 @@ const RegisterPage = () => {
           <Input
             label="Senha"
             name="password"
-            type="password"
+            type={seeingPassword ? "text" : "password"}
+            icon={seeingPassword ? <FiEye onClick={toggleSeeingPassword} /> : <FiEyeOff onClick={toggleSeeingPassword} />}
+            onClick={toggleSeeingPassword}
             value={passwordInput}
             onChange={(e) => setPasswordInput(e.target.value)}
           />
           <Input
             label="Confirmar senha"
             name="passwordConfirm"
-            type="password"
+            type={seeingPassword ? "text" : "password"}
+            icon={seeingPassword ? <FiEye onClick={toggleSeeingPassword} /> : <FiEyeOff onClick={toggleSeeingPassword} />}
+            onClick={toggleSeeingPassword}
             value={confirmPasswordInput}
             onChange={(e) => setConfirmPasswordInput(e.target.value)}
           />
@@ -239,6 +254,7 @@ const RegisterPage = () => {
           <h2>Melhore a qualidade do seu produto conosco!</h2>
         </div>
       </section>
+      {error && <Toast message={error} position="top-center" />}
     </RegisterContainer>
   );
 };

@@ -4,6 +4,26 @@ import ComponentButton from "../components/Button.tsx";
 import axios from "axios";
 import EnvsVars from "../services/EnvsVars.ts";
 import React from "react";
+import GetToken from "../services/GetToken.tsx";
+import styled from "styled-components";
+import { FiCheckCircle } from "react-icons/fi";
+
+const CardToBuy = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 12px;
+  margin-top: 12px;
+`
+
+const StyledList = styled.ul`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+`
 
 const PlanUser = () => {
   const [buy, setBuy] = React.useState<string>("");
@@ -20,10 +40,15 @@ const PlanUser = () => {
   const retriveBuyURL = async () => {
     if (user?.role === "plan") return;
 
+    const retrieveUserData = await axios.get(`${EnvsVars.API_URL}/user/public`, {
+      headers: {
+        Authorization: `Bearer ${GetToken()}`,
+      },
+    });
     const data = await axios.post(
       `${EnvsVars.API_URL}/payments/checkout-session`,
       {
-        email: user?.email,
+        email: user?.email ? user.email : retrieveUserData.data.email,
       },
     );
     setBuy(data.data.url);
@@ -54,7 +79,7 @@ const PlanUser = () => {
                 plano premium
               </h3>
               <a href={buy} target={"_blank"}>
-                <ComponentButton label={"Comprar"}></ComponentButton>
+                <ComponentButton label={"Comprar"} disabled={!buy}></ComponentButton>
               </a>
             </div>
           )}

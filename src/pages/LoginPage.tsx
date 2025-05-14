@@ -9,6 +9,7 @@ import SubTextWithLink from "../helpers/SubTextWithLink";
 import { useNavigate } from "react-router";
 import Loader from "../helpers/Loader";
 import {LoginResponse} from "../types/LoginResponse.ts";
+import { FiEye, FiEyeOff } from "react-icons/fi";
 
 const LoginContainer = styled.div`
   display: flex;
@@ -124,8 +125,13 @@ const LoginPage = () => {
   const [passwordInput, setPasswordInput] = React.useState("");
   const [isLoading, setIsLoading] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
+  const [seeingPassword, setSeeingPassword] = React.useState(false);
 
   const navigate = useNavigate();
+
+  const toggleSeeingPassword = () => {
+    setSeeingPassword(!seeingPassword);
+  };
 
   const sendForm = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -184,8 +190,10 @@ const LoginPage = () => {
           <Input
             label="Senha"
             name="password"
-            type="password"
             value={passwordInput}
+            type={seeingPassword ? "text" : "password"}
+            icon={seeingPassword ? <FiEye onClick={toggleSeeingPassword} /> : <FiEyeOff onClick={toggleSeeingPassword} />}
+            onClick={toggleSeeingPassword}
             onChange={(e) => setPasswordInput(e.target.value)}
           />
           <SubTextWithLink

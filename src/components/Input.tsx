@@ -39,6 +39,8 @@ const Input = ({
   type,
   value,
   labelColor,
+  icon,
+  onClick,
   ...props
 }: InputProps) => {
   return (
@@ -46,7 +48,17 @@ const Input = ({
       <label htmlFor={name} style={{ color: labelColor || "#fff" }}>
         {label}
       </label>
-      <input id={name} type={type} name={name} value={value} {...props} />
+      <div style={{ position: "relative" }}>
+        <input
+          id={name}
+          type={type}
+          name={name}
+          value={value}
+          {...props}
+          style={{ width: "90%" }}
+        />
+        <span style={{ position: "relative", right: "25px", top: "3px", color: "#222", cursor: onClick ? "pointer" : "default" }} onClick={onClick}>{icon}</span>
+      </div>
     </InputStyle>
   );
 };

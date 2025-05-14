@@ -1,5 +1,17 @@
 import React from "react";
 import { ToastContainer, ToastPosition, toast } from "react-toastify";
+import styled from "styled-components";
+
+const ToastContainerStyle = styled(ToastContainer)`
+  .Toastify__toast {
+    min-width: 300px;
+    max-width: 500px;
+    padding: 16px;
+    font-size: 16px;
+    display: flex;
+    gap: 16px;
+  }
+`;
 
 const Toast = ({
   message,
@@ -15,7 +27,7 @@ const Toast = ({
 
   return (
     <div>
-      <ToastContainer
+      <ToastContainerStyle
         position={position}
         autoClose={3000}
         hideProgressBar={false}
@@ -23,8 +35,9 @@ const Toast = ({
         closeOnClick={true}
         rtl={false}
         pauseOnFocusLoss
+        pauseOnHover
         draggable={true}
-        theme='dark'
+        theme='colored'
       />
     </div>
   );

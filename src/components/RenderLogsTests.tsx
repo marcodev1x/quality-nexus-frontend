@@ -12,6 +12,7 @@ import { MethodBadge } from "./RenderExistingTests.tsx";
 import { TestsList } from "../Interfaces/TestsList.tsx";
 import ComponentButton from "./Button.tsx";
 import ModalRun from "./ModalRun.tsx";
+import Loader from "../helpers/Loader.tsx";
 
 const TableContainer = styled.div`
   margin: 24px 0 0 0;
@@ -139,7 +140,11 @@ const RenderLogsTests = () => {
   const LogsTestsFn = () => {
     let dataToFill: any = data;
 
+
+
     if (Array.isArray(dataToFill)) {
+      if(dataToFill.length === 0) return <div> Nenhum registro de teste encontrado. Comece a testar!</div>
+
       return dataToFill.map((log, idx) => (
         <TableColumn key={idx} status={log.status}>
           <TitleContainer>
@@ -197,8 +202,7 @@ const RenderLogsTests = () => {
 
   return (
     <>
-      {isLoading && <div>Loading...</div>}
-      {error && <div>{JSON.stringify(error)}</div>}
+      {isLoading && <Loader />}
       <ContainerMid>
         <TotalTests />
         <TableContainer>
