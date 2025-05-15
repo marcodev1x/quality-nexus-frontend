@@ -1,6 +1,6 @@
 export interface TestsList {
   id: number;
-  type: "integration" | "load" | "performance";
+  type: "integration" | "load";
   description: string;
   config: {
     method: string;

@@ -109,7 +109,7 @@ const RenderLogsTests = () => {
     });
   }, []);
 
-  const { data, isLoading, error } = useApi(
+  const { data, isLoading } = useApi(
     "GET",
     `${EnvsVars.API_URL}/tests/tests-logs`,
     null,
@@ -139,8 +139,6 @@ const RenderLogsTests = () => {
 
   const LogsTestsFn = () => {
     let dataToFill: any = data;
-
-
 
     if (Array.isArray(dataToFill)) {
       if(dataToFill.length === 0) return <div> Nenhum registro de teste encontrado. Comece a testar!</div>
@@ -173,7 +171,7 @@ const RenderLogsTests = () => {
           <p>{formatData(log.createdAt)}</p>
           <ComponentButton
             onClick={(e) => {
-              e.stopPropagation(); // Evita que o evento se propague
+              e.stopPropagation();
               handleModalOpenning(log);
             }}
             label="Ver logs"

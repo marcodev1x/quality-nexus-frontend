@@ -23,6 +23,7 @@ import EnvsVars from "../services/EnvsVars.ts";
 import GetToken from "../services/GetToken.tsx";
 import Toast from "../helpers/Toast.tsx";
 import ToastSuccess from "../helpers/ToastSuccess.tsx";
+import useUser from "../hooks/useUser.ts";
 
 const AddButtonContainer = styled(FirstTopContainer)`
   margin-bottom: 24px;
@@ -125,8 +126,11 @@ const LoaderPage = () => {
   const [addTest, setAddTest] = React.useState<boolean>(false);
   const [tooltip, setTooltip] = React.useState<boolean>(false);
   const [workers, setWorkers] = React.useState<string>("0");
+  const [onTestCountChange, setOnTestCountChange] = React.useState<number>(0);
   const [connections, setConnections] = React.useState<string>("1");
   const [duration, setDuration] = React.useState<string>("");
+
+  const user = useUser();
 
   if (Number(workers) >= 17) {
     setWorkers("16");
@@ -226,6 +230,7 @@ const LoaderPage = () => {
       {!isLoading && !addTest && (
         <AddButtonContainer>
           <ComponentButton
+            disabled={onTestCountChange >= 3 && user?.role === "free"}
             label="Adicionar teste"
             size="large"
             variant="primary"
@@ -234,7 +239,7 @@ const LoaderPage = () => {
           />
         </AddButtonContainer>
       )}
-      {!isLoading && !addTest && <RenderExistingTests />}
+      {!isLoading && !addTest && <RenderExistingTests onTestCountChange={setOnTestCountChange} />}
       {isLoading && <Loader />}
       {!isLoading && addTest && (
         <StyledForm onSubmit={sendForm}>

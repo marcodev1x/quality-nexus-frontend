@@ -12,6 +12,7 @@ import ModalRun from "./ModalRun.tsx";
 import EnvsVars from "../services/EnvsVars";
 import { useLocation } from "react-router";
 import { TitleSedwick } from "./RenderLogsTests.tsx";
+import useUser from "../hooks/useUser.ts";
 
 const TableContainer = styled.div`
   width: 100%;
@@ -178,7 +179,7 @@ const EmptyStateMessage = styled.div`
 
 console.log(EnvsVars.API_URL);
 
-const RenderExistingTests = () => {
+const RenderExistingTests = ({ onTestCountChange }: { onTestCountChange: (count: number) => void }) => {
   const [deleteTestLoading, setDeleteTestLoading] = React.useState(false);
   const [deleteTestError, setDeleteTestError] = React.useState(false);
   const [deleteTest, setDeleteTest] = React.useState(false);
@@ -187,6 +188,8 @@ const RenderExistingTests = () => {
   const [selectedTest, setSelectedTest] = React.useState<TestsList | null>(
     null,
   );
+
+  const user = useUser();
 
   const location = useLocation();
 
@@ -216,7 +219,6 @@ const RenderExistingTests = () => {
       const filteringTypesLoad = userTests.filter(
         (test) => test.type === "load",
       );
-      console.log(tests);
 
       if (location.pathname === "/interno/integration")
         setTests(filteringTypesIntegration);
@@ -278,12 +280,24 @@ const RenderExistingTests = () => {
     setIsModalOpen(false);
   };
 
+  const titleLimitSetter = () => {
+    if (location.pathname === "/interno/integration") {
+      if(tests.length >= 3 && user?.role === "free") return "Limite de testes atingido em APIs"
+      return "Testes de API";
+    }
+
+    if (location.pathname === "/interno/load") {
+      if(tests.length >= 3 && user?.role === "free") return "Limite de testes atingido em Cargas"
+      return "Testes de carga";
+    }
+  }
+
+  onTestCountChange(tests.length);
+
   return (
     <>
       <TitleSedwick style={{ marginBottom: "2rem", marginTop: "3rem" }}>
-        {location.pathname === "/interno/integration"
-          ? "Testes de API"
-          : "Testes de carga"}
+        {titleLimitSetter()}
       </TitleSedwick>
       <TableContainer>
         {deleteTest && <ToastSuccess message="Teste excluído com sucesso" />}

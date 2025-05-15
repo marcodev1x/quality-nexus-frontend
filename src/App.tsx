@@ -6,7 +6,6 @@ import RegisterPage from "./pages/RegisterPage";
 import DashboardPage from "./pages/DashboardPage";
 import ConfigurationPage from "./pages/ConfigurationPage";
 import Integration from "./pages/IntegrationPage";
-import Performance from "./pages/PerformancePage";
 import LoaderPage from "./pages/LoaderPage";
 import ProtectedPage from "./pages/ProtectedPage";
 import ConfigUser from "./pages/ConfigUser";
@@ -28,7 +27,6 @@ function App() {
               <Route path="/configuracoes/plan" element={<PlanUser />} />
             </Route>
             <Route path="/interno/integration" element={<Integration />} />
-            <Route path="/interno/performance" element={<Performance />} />
             <Route path="/interno/load" element={<LoaderPage />} />
             <Route
               path="/interno/testes-anteriores"

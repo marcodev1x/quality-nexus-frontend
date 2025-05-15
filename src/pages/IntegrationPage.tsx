@@ -123,6 +123,7 @@ const Integration = () => {
   >([]);
   const [body, setBody] = React.useState<string>("");
   const [description, setDescription] = React.useState<string>("");
+  const [totalTests, setTotalTests] = React.useState<number>(0);
   const [addTest, setAddTest] = React.useState<boolean>(false);
   const [expectations, setExpectations] = React.useState<
     { key: string; expected: string; value: string }[]
@@ -147,11 +148,10 @@ const Integration = () => {
       try {
         parsedBody = JSON.parse(body);
       } catch (parseError) {
-        // Se o parse falhar, define um erro e interrompe
         console.error("Erro ao fazer parse do JSON:", parseError);
         setError("Formato JSON inválido no corpo da requisição.");
         setIsLoading(false);
-        return; // Interrompe a execução da função
+        return;
       }
     }
 
@@ -214,6 +214,7 @@ const Integration = () => {
       {!isLoading && !addTest && (
         <AddButtonContainer>
           <ComponentButton
+            disabled={totalTests >= 3 && user?.role === "free"}
             label="Adicionar teste"
             size="large"
             variant="primary"
@@ -222,7 +223,7 @@ const Integration = () => {
           />
         </AddButtonContainer>
       )}
-      {!isLoading && !addTest && <RenderExistingTests />}
+      {!isLoading && !addTest && <RenderExistingTests onTestCountChange={setTotalTests} />}
       {isLoading && <Loader />}
       {!isLoading && addTest && (
         <StyledForm onSubmit={sendForm}>
