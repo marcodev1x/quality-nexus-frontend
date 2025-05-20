@@ -282,12 +282,12 @@ const RenderExistingTests = ({ onTestCountChange }: { onTestCountChange: (count:
 
   const titleLimitSetter = () => {
     if (location.pathname === "/interno/integration") {
-      if(tests.length >= 3 && user?.role === "free") return "Limite de testes atingido em APIs"
+      if(tests.length >= Number(EnvsVars.LIMIT_TESTS_PER_TEST_TYPE) && user?.role === "free") return "Limite de testes atingido em APIs"
       return "Testes de API";
     }
 
     if (location.pathname === "/interno/load") {
-      if(tests.length >= 3 && user?.role === "free") return "Limite de testes atingido em Cargas"
+      if(tests.length >= Number(EnvsVars.LIMIT_TESTS_PER_TEST_TYPE) && user?.role === "free") return "Limite de testes atingido em Cargas"
       return "Testes de carga";
     }
   }

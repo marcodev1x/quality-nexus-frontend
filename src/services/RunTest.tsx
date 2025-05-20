@@ -181,10 +181,12 @@ const LoaderWrapper = styled.div`
 
 const RunTest = ({
   test,
+  setIsVisualizing,
   onRunningChange,
   alwaysHaveData = false,
 }: {
   test: TestsList;
+  setIsVisualizing: React.Dispatch<React.SetStateAction<boolean>>;
   onRunningChange?: (running: boolean) => void;
   alwaysHaveData?: boolean;
 }) => {
@@ -199,6 +201,7 @@ const RunTest = ({
   const handleRunTest = React.useCallback(async () => {
     if (test.type === "integration" && alwaysHaveData) {
       setRunTest(test.results);
+      setIsVisualizing(true);
       return;
     }
 
@@ -240,6 +243,7 @@ const RunTest = ({
 
     if (test.type === "load" && alwaysHaveData) {
       setRunLoadTest(test.results);
+      setIsVisualizing(true);
       console.log(test, test.results, runLoadTest);
       return;
     }
@@ -304,7 +308,7 @@ const RunTest = ({
   };
 
   const returnExpectationsMapping = () => {
-    if (test.results?.resolvedResults)
+    if (test.results?.resolvedResults?.length >= 1)
       return test.results?.resolvedResults.map((r: any, index: any) => (
         <ExpectationItem
           key={index}

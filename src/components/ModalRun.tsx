@@ -221,7 +221,7 @@ const MethodBadge = styled.span<{ method: string }>`
 const renderExpectations = (
   expectations: TestsList["config"]["expectations"],
 ) => {
-  if (!expectations || !Array.isArray(expectations)) return "N/A";
+  if (!expectations || !Array.isArray(expectations) || expectations.length === 0) return "N/A";
 
   return expectations.map((expectation, index) => (
     <ExpectationItem key={index}>
@@ -254,9 +254,11 @@ const ModalRun = ({
 }) => {
   const [test, setTest] = React.useState<TestsList | null>(null);
   const [isTestRunning, setIsTestRunning] = React.useState(false);
+  const [isVisualizing, setIsVisualizing] = React.useState(false);
 
   const handleTestRunning = (running: boolean) => {
     setIsTestRunning(running);
+    setIsVisualizing(!running);
   };
 
   const updateTest = React.useCallback(() => {
@@ -294,7 +296,7 @@ const ModalRun = ({
                 }}
               />
             </CloseButton>
-            {!isTestRunning && (
+            {!isTestRunning && !isVisualizing && (
               <>
                 <Title>{test.description || "Sem descrição"}</Title>
                 <UrlText>
@@ -392,6 +394,7 @@ const ModalRun = ({
             )}
             <RunTest
               test={test}
+              setIsVisualizing={setIsVisualizing}
               onRunningChange={handleTestRunning}
               alwaysHaveData={alwaysHaveData}
             />

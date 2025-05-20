@@ -192,7 +192,7 @@ const RenderLogsTests = () => {
   const formatData = (data: Date) => {
     if (!data) return "Sem data definida";
 
-    const BrazilDate = addHours(data, -3); // Adiciona 3 horas para converter para o fuso horário do Brasil
+    const BrazilDate = addHours(data, -3);
     return format(new Date(BrazilDate), "dd/MM/yyyy HH:mm:ss", {
       locale: ptBR,
     });

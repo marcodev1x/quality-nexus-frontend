@@ -214,7 +214,7 @@ const Integration = () => {
       {!isLoading && !addTest && (
         <AddButtonContainer>
           <ComponentButton
-            disabled={totalTests >= 3 && user?.role === "free"}
+            disabled={totalTests >= Number(EnvsVars.LIMIT_TESTS_PER_TEST_TYPE) && user?.role === "free"}
             label="Adicionar teste"
             size="large"
             variant="primary"
