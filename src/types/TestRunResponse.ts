@@ -8,7 +8,7 @@ export type TestRunResponse = {
     key: string;
     passed: {
       status: boolean;
-      found: unknown;
+      found: any;
     };
     operator: string;
     value: string;

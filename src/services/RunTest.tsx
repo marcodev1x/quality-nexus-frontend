@@ -340,7 +340,15 @@ const RunTest = ({
               <FiCheckCircle color="#2ecc71" />
             )}
           </ExpectationIcon>
-          {`Chave API: ${r.key} - Operador: ${r.operator} - Valor esperado: ${r.value}\n -> Valor retornado: ${r.passed?.found ?? "N/A"}\n`}
+          <p>
+            <b>Chave API</b>: {r.key}
+          </p>
+          <p>
+            <b>Operador</b>: {r.operator}
+          </p>
+          <p>
+            <b>Valor da chave</b>: {r.passed?.found ?? "Sem retorno"}
+          </p>
         </ExpectationItem>
       ));
     }
