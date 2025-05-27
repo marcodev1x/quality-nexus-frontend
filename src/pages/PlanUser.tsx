@@ -15,13 +15,21 @@ const CardToBuy = styled.div`
   background-color: #fff;
   border: 1px solid #ccc;
   border-radius: 8px;
-  padding: 12px;
+  padding: 32px;
   margin-top: 12px;
-`
+`;
 
 const StyledList = styled.ul`
+  margin-top: 12px;
+  margin-bottom: 4px;
   display: flex;
   flex-direction: column;
+  gap: 24px;
+`;
+
+const StyledLi = styled.li`
+  display: flex;
+  align-items: center;
   gap: 8px;
 `
 
@@ -40,11 +48,14 @@ const PlanUser = () => {
   const retriveBuyURL = async () => {
     if (user?.role === "plan") return;
 
-    const retrieveUserData = await axios.get(`${EnvsVars.API_URL}/user/public`, {
-      headers: {
-        Authorization: `Bearer ${GetToken()}`,
+    const retrieveUserData = await axios.get(
+      `${EnvsVars.API_URL}/user/public`,
+      {
+        headers: {
+          Authorization: `Bearer ${GetToken()}`,
+        },
       },
-    });
+    );
     const data = await axios.post(
       `${EnvsVars.API_URL}/payments/checkout-session`,
       {
@@ -58,6 +69,16 @@ const PlanUser = () => {
     retriveBuyURL();
   }, []);
 
+ /* async function handleCancel() {
+    if(user?.role === 'free') return;
+
+    const cancelPayment = await axios.post(`${EnvsVars.API_URL}/payments/cancel-subscription`, {
+      subId: user?.stripe_subscription_id,
+    });
+
+    window.location.reload();
+  }*/
+
   return (
     <FirstTopContainer>
       <div
@@ -68,30 +89,58 @@ const PlanUser = () => {
           gap: "12px",
         }}
       >
+        <CardToBuy>
         <div>
           <h1>Plano atual: {returnNamedPlan()}</h1>
         </div>
-        <div>
-          {returnNamedPlan() === "Free" && (
+        {returnNamedPlan() === "Free" && (
             <div>
               <h3 style={{ fontWeight: "normal", color: "#232" }}>
                 Você está no plano gratuito, considere fazer um upgrade para o
-                plano premium
+                plano premium para ter acesso a todos os benefícios.
               </h3>
-              <a href={buy} target={"_blank"}>
-                <ComponentButton label={"Comprar"} disabled={!buy}></ComponentButton>
-              </a>
             </div>
           )}
+        <StyledList>
+          <StyledLi>
+            <FiCheckCircle color="#2ecc71" />
+            Execução ilimitada de testes
+          </StyledLi>
+          <StyledLi>
+            <FiCheckCircle color="#2ecc71" />
+            Testes de carga avançados
+          </StyledLi>
+          <StyledLi>
+            <FiCheckCircle color="#2ecc71" />
+            Relatórios detalhados e históricos
+          </StyledLi>
+          <StyledLi>
+            <FiCheckCircle color="#2ecc71" />
+            Alertas e monitoramento em tempo real
+          </StyledLi>
+          <StyledLi>
+            <FiCheckCircle color="#2ecc71" />
+            Configurações personalizadas
+          </StyledLi>
+        </StyledList>
+        {returnNamedPlan() === "Free" && (
+          <a href={buy} target={"_blank"}>
+            <ComponentButton
+              label={"Comprar"}
+              disabled={!buy}
+            ></ComponentButton>
+          </a>
+        )}
           {returnNamedPlan() === "Pago" && (
             <div>
               <h3 style={{ fontWeight: "normal", color: "#232" }}>
                 Você está no plano premium, aproveite seus benefícios e comece a
                 testar. Obrigado por utilizar o Quality Nexus!
               </h3>
+              {/*<ComponentButton label={"Cancelar"}/>*/}
             </div>
           )}
-        </div>
+        </CardToBuy>
       </div>
     </FirstTopContainer>
   );
