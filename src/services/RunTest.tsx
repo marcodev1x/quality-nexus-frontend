@@ -321,7 +321,15 @@ const RunTest = ({
               <FiCheckCircle color="#2ecc71" />
             )}
           </ExpectationIcon>
-          {`Chave API: ${r.key} - Operador: ${r.operator} - Valor esperado: ${r.value}\n -> Valor retornado: ${r.passed?.found ?? "N/A"}\n`}
+          <p>
+            <b>Chave API</b>: {r.key}
+          </p>
+          <p>
+            <b>Operador</b>: {r.operator}
+          </p>
+          <p>
+            <b>Valor da chave</b>: {r.value}
+          </p>
         </ExpectationItem>
       ));
 
@@ -347,7 +355,7 @@ const RunTest = ({
             <b>Operador</b>: {r.operator}
           </p>
           <p>
-            <b>Valor da chave</b>: {r.passed?.found ?? "Sem retorno"}
+            <b>Valor da chave</b>: {r.value ? r.value : "N/A"}
           </p>
         </ExpectationItem>
       ));
@@ -365,8 +373,15 @@ const RunTest = ({
         .map((exp, index) => (
           <ErrorDetail key={index}>
             <div>
-              Expectativa:{" "}
-              {`Chave API: ${exp.key} - Operador: ${exp.operator} - Valor esperado: ${exp.value} - Erro retornado: ${exp.error}`}
+              <p>
+            <b>Chave API</b>: {exp.key}
+          </p>
+          <p>
+            <b>Operador</b>: {exp.operator}
+          </p>
+          <p>
+            <b>Valor da chave</b>: {exp.passed?.found}
+          </p>
             </div>
             <div>Erro: {exp.error}</div>
           </ErrorDetail>
