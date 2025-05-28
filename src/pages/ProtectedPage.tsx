@@ -7,6 +7,7 @@ import axios from "axios";
 import { UserResponse } from "../types/UserResponse";
 import UserContext from "../contexts/userContext";
 import EnvsVars from "../services/EnvsVars";
+import TallyForm from "../components/TallyForm";
 
 const Layout = styled.div`
   display: flex;
@@ -103,6 +104,7 @@ const Content = styled.main`
 const ProtectedPage = () => {
   const verifyAuth = GetToken();
   const [user, setUser] = useState<UserResponse | null>(null);
+  const [quantityAccess, setQuantityAccess] = useState<number>(0);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -118,15 +120,35 @@ const ProtectedPage = () => {
       }
     };
 
+    const fetchQuantityAccess = async () => {
+      try {
+        const response = await axios.get(`${EnvsVars.API_URL}/user/quantity-access`, {
+          headers: {
+            Authorization: `Bearer ${GetToken() || null}`
+          }
+        })
+        setQuantityAccess(response.data.quantityAccess)
+      } catch(err) {
+        console.warn("Erro ao buscar quantidade de acesso", err);
+      }
+    }
+
     if (verifyAuth) {
       fetchUser();
+      fetchQuantityAccess();
     }
   }, [verifyAuth]);
 
+  console.log(quantityAccess)
+
   if (!verifyAuth) return <Navigate to="/" />;
+
+  Tally.loadEmbeds();
+
 
   return (
     <UserContext.Provider value={user}>
+      <TallyForm src="https://tally.so/embed/nG4zR2?hideTitle=1&transparentBackground=1&dynamicHeight=1" quantityAccess={quantityAccess} formCode="nG4zR2"/>
       <Layout>
         <LateralMenu />
         <Content>
