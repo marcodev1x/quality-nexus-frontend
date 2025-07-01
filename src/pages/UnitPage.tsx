@@ -97,7 +97,7 @@ export const Unit = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [response, setResponse] = useState('')
   const [framework, setFramework] = useState('Jest')
-  
+
   const prompt = `  Você é um engenheiro de testes sênior no projeto Quality Nexus, especialista em gerar testes unitários de alta qualidade.
   
   ---  
@@ -119,6 +119,8 @@ export const Unit = () => {
      - Casos-limite (boundary cases)  
   4. Não explique o código; **gere apenas** os blocos de teste prontos para copiar.  
   5. Insira um comentário no início avisando que pode ser necessário **ajustar imports, mocks ou a função original**.
+  6. Utilize test() e não it().
+  7. Insira uma marca d'água como texto que indique que o teste foi gerado automaticamente via plataforma Quality Nexus.
   
   ---  
   🚨 Fluxos de Fallback e Validação de Input  
@@ -181,7 +183,7 @@ export const Unit = () => {
       setResponse(requestAi.data.choices[0].message.content)
     } catch (error) {
       console.error(error)
-      setResponse('❌ Ocorreu um erro ao buscar a resposta.')
+      setResponse('❌ Ocorreu um erro ao criar seus testes unitários. Contate o suporte.')
     } finally {
       setIsLoading(false)
     }
@@ -211,7 +213,7 @@ export const Unit = () => {
             className="input"
             placeholder="Insira a função que você deseja testar"
             multiline
-            minRows={4}
+            minRows={2}
             maxRows={10}
             variant="filled"
             value={message}
@@ -226,7 +228,7 @@ export const Unit = () => {
             }}
           />
           <Button onClick={handleSend} className="btn">
-            Criar testes unitários
+            {response ? 'Reenviar' : 'Criar testes unitários'}
           </Button>
         </div>
 
