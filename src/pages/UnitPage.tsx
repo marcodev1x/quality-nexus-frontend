@@ -11,15 +11,7 @@ import InputSelect from '../components/InputSelect';
 import hljs from 'highlight.js';
 import 'highlight.js/styles/idea.css';
 import ContainerMid from '../components/ContainerMid';
-
-
-const PageTitle = styled.h1`
-  font-size: 2.5rem;
-  margin-bottom: 2.5rem;
-  font-family: "Sedgwick Ave Display", "cursive";
-  color: #2ecc71;
-  letter-spacing: 0.1rem;
-`;
+import Tooltip from '../components/Tooltip';
 
 const Chat = styled.div`
   width: 100%;
@@ -41,12 +33,12 @@ const Chat = styled.div`
   .btn {
     background: #2ecc71;
     color: #fff;
-    padding: 0.8rem 1.5rem;
+    padding: .2rem 1rem;
     border-radius: 12px;
     border: 0;
     font-family: 'Poppins', sans-serif;
     text-transform: none;
-    height: 56px;
+    height: 40px;
     transition: background 0.2s ease;
     &:hover {
       background: #27ae60;
@@ -79,6 +71,10 @@ const Chat = styled.div`
     font-family: 'Fira Code', monospace;
   }
 
+  .input:focus {
+    border: none;
+  }
+
   .header {
     display: flex;
     justify-content: space-between;
@@ -91,6 +87,21 @@ const Chat = styled.div`
     min-width: 160px;
   }
 `
+
+const TitleTooltip = styled.div`
+display: flex;
+flex-direction: row;
+gap: 8px;
+`;
+
+const FormTitle = styled.h2`
+  font-size: 26px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 12px;
+  position: relative;
+  display: inline-block;
+`;
 
 export const Unit = () => {
   const [message, setMessage] = useState('')
@@ -121,6 +132,7 @@ export const Unit = () => {
   5. Insira um comentário no início avisando que pode ser necessário **ajustar imports, mocks ou a função original**.
   6. Utilize test() e não it().
   7. Insira uma marca d'água como texto que indique que o teste foi gerado automaticamente via plataforma Quality Nexus.
+
   
   ---  
   🚨 Fluxos de Fallback e Validação de Input  
@@ -137,8 +149,8 @@ export const Unit = () => {
   
   - **Input não é função** (classe, componente, constante ou texto solto):  
     → Gere testes apropriados ao tipo (p. ex. componentes React com Testing Library).  
-    → Se for algo não testável unitariamente (ex: um JSON puro), **responda solicitando** o código correto:  
-      “⚠️ Parece que você enviou um texto que não é uma função. Por favor, reenvie apenas a função ou componente que deseja testar.”
+    → Se for algo não testável unitariamente (ex: um JSON puro, apenas uma string, apenas um número), **responda solicitando** o código correto:  
+      “⚠️ Parece que você enviou um texto que não é uma função. Por favor, reenvie apenas a função ou componente que deseja testar.”  NÃO RESPONDA MAIS NADA ALÉM DISSO. Apenas o alerta., sem inserir marca d'água ou comentário de ajustes.,
   
   - **Múltiplas funções/encomenda de integração**:  
     → Foque apenas em testes unitários. Se o usuário pedir integração, **confirme** que deseja testes de integração e encerre gerando um aviso breve.
@@ -185,16 +197,24 @@ export const Unit = () => {
       console.error(error)
       setResponse('❌ Ocorreu um erro ao criar seus testes unitários. Contate o suporte.')
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
+      setMessage('');
     }
   }
 
   return (
     <ContainerMid>
       <Chat>
-        <div className="header">
-           <PageTitle>Gerar Testes Unitários</PageTitle>
-           <InputSelect
+        <div>
+         <TitleTooltip>
+        <FormTitle>Gerar testes unitários com IA</FormTitle>
+        <Tooltip text="
+         Para utilizar, insira uma função completa. O sistema irá gerar testes unitários para sua função utilizando inteligência artificial de última geração.
+        "/>
+        </TitleTooltip>
+        </div>
+
+        <InputSelect
             label="Framework"
             options={[
               "Jest",
@@ -206,22 +226,36 @@ export const Unit = () => {
             ]}
             changeState={setFramework}
            />
-        </div>
 
         <div className="chatInputContainer">
           <TextField
             className="input"
-            placeholder="Insira a função que você deseja testar"
+            placeholder="Insira aqui a função que você deseja testar"
             multiline
             minRows={2}
-            maxRows={10}
-            variant="filled"
+            maxRows={14}
+            variant="standard"
             value={message}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => setMessage(e.target.value)}
             fullWidth
             InputProps={{
               style: {
+                disableUnderline: true,
                 fontFamily: 'courier new',
+                fontSize: '1rem',
+                color: '#2c3e50',
+              },
+              sx: {
+                '&:after': {
+                  borderBottom: '2px solid #2ecc71', // <- sua cor personalizada
+                },
+                '&:before': {
+                  borderBottom: '1px solid #aaa', // <- cor antes do foco
+                },
+                '&:hover:not(.Mui-disabled):before': {
+                  borderBottom: '1px solid #666', // <- hover
+                },
+                fontFamily: 'Courier New',
                 fontSize: '1rem',
                 color: '#2c3e50',
               },

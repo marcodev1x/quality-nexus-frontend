@@ -13,6 +13,7 @@ import {
 } from "react-icons/fi";
 import { NavLink, useNavigate } from "react-router";
 import useUser from "../hooks/useUser";
+import { Badge } from "@mui/material";
 
 const StyledMenu = styled.nav`
   display: flex;
@@ -91,6 +92,17 @@ const StyledMenu = styled.nav`
 
     margin: 12px auto 24px 40px;
   }
+
+  .badgeIa {
+    font-weight: bold;
+    color: #4ecc70;
+    position: relative;
+    font-size: 0.8rem;
+    align-content: center;
+    display: flex;
+    padding: 4px;
+    border-radius: 16px;
+  }
 `;
 
 const LateralMenu = () => {
@@ -165,7 +177,8 @@ const LateralMenu = () => {
         >
           <li className={location.pathname === "/interno/unit" ? "active" : ""}>
             <FiBatteryCharging/>
-            Unidade
+            Testes unitários
+             <Badge badgeContent={'Com IA'} className="badgeIa" />
           </li>
         </NavLink>
         <NavLink
