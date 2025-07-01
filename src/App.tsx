@@ -11,6 +11,7 @@ import ProtectedPage from "./pages/ProtectedPage";
 import ConfigUser from "./pages/ConfigUser";
 import PlanUser from "./pages/PlanUser.tsx";
 import { HistoryTestsPage } from "./pages/HistoryTestsPage.tsx";
+import { Unit } from "./pages/UnitPage.tsx";
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
               <Route path="/configuracoes/user" element={<ConfigUser />} />
               <Route path="/configuracoes/plan" element={<PlanUser />} />
             </Route>
+            <Route path="/interno/unit" element={<Unit />} />
             <Route path="/interno/integration" element={<Integration />} />
             <Route path="/interno/load" element={<LoaderPage />} />
             <Route

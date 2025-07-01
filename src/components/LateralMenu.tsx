@@ -7,6 +7,9 @@ import {
   FiPercent,
   FiSettings,
   FiClock,
+  FiFileMinus,
+  FiArchive,
+  FiBatteryCharging,
 } from "react-icons/fi";
 import { NavLink, useNavigate } from "react-router";
 import useUser from "../hooks/useUser";
@@ -153,6 +156,16 @@ const LateralMenu = () => {
           <li className={location.pathname === "/interno/load" ? "active" : ""}>
             <FiLoader />
             Carga
+          </li>
+        </NavLink>
+        <NavLink
+          to="/interno/unit"
+          style={{ textDecoration: "none" }}
+          className={location.pathname === "/interno/unit" ? "active" : ""}
+        >
+          <li className={location.pathname === "/interno/unit" ? "active" : ""}>
+            <FiBatteryCharging/>
+            Unidade
           </li>
         </NavLink>
         <NavLink
